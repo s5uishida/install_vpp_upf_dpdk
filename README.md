@@ -361,8 +361,8 @@ n3                                 1     up   n3
     rss active:        none
     tx burst function: eth_em_xmit_pkts
     rx burst function: eth_em_recv_scattered_pkts
-
 0: format_dpdk_device:590: rte_eth_dev_rss_hash_conf_get returned -95
+
 n4                                 2     up   n4
   Link speed: 1 Gbps
   Ethernet address 08:00:27:37:37:0c
@@ -386,11 +386,6 @@ n4                                 2     up   n4
     tx burst function: eth_em_xmit_pkts
     rx burst function: eth_em_recv_scattered_pkts
 
-    rx frames ok                                           1
-    rx bytes ok                                           70
-    extended stats:
-      rx_good_packets                                      1
-      rx_good_bytes                                       70
 n6                                 3     up   n6
   Link speed: 1 Gbps
   Ethernet address 08:00:27:2f:02:98
@@ -417,6 +412,7 @@ n6                                 3     up   n6
 upf-nwi-internet                   4     up   upf-nwi-internet
   Link speed: unknown
   GTPU
+vpp# 
 ```
 ```
 vpp# show udp punt 
