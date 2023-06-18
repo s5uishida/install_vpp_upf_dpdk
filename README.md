@@ -307,24 +307,10 @@ upf node-id fqdn 192.168.14.151
 
 upf nwi name internet vrf 0
 
+upf specification release 16
+
 upf gtpu endpoint ip 192.168.13.151 nwi internet teid 0x000004d2/2
 ```
-**Note. According to [this](https://github.com/open5gs/open5gs/discussions/1964#discussioncomment-4492394), VPP-UPF uses User Plane IP Resource Information, but Open5GS does not support this since it was removed in 3GPP Release 16.3.
-Open5GS SMF uses the PFCP IP address instead because the User Plain IP resource is not available.
-So the `init.conf` file will need to be changed as follows.**
-
-**For Open5GS)**
-```diff
---- init.conf   2023-06-15 02:31:00.000000000 +0900
-+++ init.conf.open5gs   2023-06-15 02:35:00.059563942 +0900
-@@ -21,4 +21,4 @@
- 
- upf nwi name internet vrf 0
- 
--upf gtpu endpoint ip 192.168.13.151 nwi internet teid 0x000004d2/2
-+upf gtpu endpoint ip 192.168.14.151 nwi internet teid 0x000004d2/2
-```
-**For this reason, in the future, VPP-UPF will need to configure FTUP=1 in UP Function Features in PFCP Association Setup Response.**
 
 <h2 id="run">Run VPP-UPF with DPDK on VM-UP</h2>
 
@@ -462,4 +448,5 @@ I would like to thank the excellent developers and all the contributors of OpenA
 
 <h2 id="changelog">Changelog (summary)</h2>
 
+- [2023.06.18] Added `upf specification release 16` line in `init.conf`. Along with this, the corresponding description was deleted because the correspondence in the case of Open5GS became unnecessary.
 - [2023.06.15] Initial release.
