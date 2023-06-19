@@ -414,10 +414,25 @@ upf-nwi-internet                   4     up   upf-nwi-internet
   GTPU
 vpp# 
 ```
+
+```
+vpp# show interface address
+local0 (dn):
+n3 (up):
+  L3 192.168.13.151/24
+n4 (up):
+  L3 192.168.14.151/24
+n6 (up):
+  L3 192.168.16.151/24
+upf-nwi-internet (up):
+vpp# 
+```
+
 ```
 vpp# show udp punt 
 IPV4 UDP ports punt : 2152, 8805
 IPV6 UDP ports punt : 2152
+vpp# 
 ```
 
 <h2 id="setup_dn">Setup Data Network Gateway on VM-DN</h2>
