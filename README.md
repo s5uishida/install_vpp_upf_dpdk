@@ -311,6 +311,11 @@ upf specification release 16
 
 upf gtpu endpoint ip 192.168.13.151 nwi internet teid 0x000004d2/2
 ```
+By adding the following line as in `init.conf` above,
+```
+upf specification release 16
+```
+`FTUP: Supported` is set in `UP Function Features` of `PFCP Association Setup Response` from VPP-UPF.
 
 <h2 id="run">Run VPP-UPF with DPDK on VM-UP</h2>
 
