@@ -114,7 +114,21 @@ Please refer to the following for building OAI UPF (VPP-UPF).
 
 ```diff
 --- build_helper.upf.orig       2023-06-11 19:29:54.000000000 +0900
-+++ build_helper.upf    2023-06-11 19:32:08.000000000 +0900
++++ build_helper.upf    2023-07-05 18:48:12.567431731 +0900
+@@ -122,11 +122,11 @@
+ 
+ add_Travelping_upf_plugin(){
+   GIT_URL=https://github.com/travelping/upg-vpp.git
+-  GIT_BRANCH=master
++  GIT_BRANCH=stable/1.2
+   echo_info "Cloning Travelping UPG plugin"
+   pushd $OPENAIRCN_DIR/
+   git clone -b $GIT_BRANCH $GIT_URL
+-  cd $OPENAIRCN_DIR/upg-vpp && git checkout -f 1f047425c5c99db44c2e599ad1dfd767d426cce8
++  cd $OPENAIRCN_DIR/upg-vpp
+   mkdir -p -- $OPENAIRCN_DIR/vpp/patches
+   cp -rf $OPENAIRCN_DIR/upg-vpp/upf/ $OPENAIRCN_DIR/vpp/src/plugins/
+   cp -rf $OPENAIRCN_DIR/upg-vpp/vpp-patches/* $OPENAIRCN_DIR/vpp/patches
 @@ -153,6 +153,7 @@
    $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/bin/vppctl /bin/
    echo_info "Copied binaries to /bin"
@@ -332,7 +346,7 @@ dpdk/cryptodev   [warn  ]: dpdk_cryptodev_init: Not enough cryptodevs
  _/ _// // / / / _ \   | |/ / ___/ ___/
  /_/ /____(_)_/\___/   |___/_/  /_/    
 
-vpp#  
+vpp# 
 ```
 
 <h3 id="verify">Verify interfaces at VPP</h3>
@@ -464,5 +478,6 @@ I would like to thank the excellent developers and all the contributors of OpenA
 
 <h2 id="changelog">Changelog (summary)</h2>
 
+- [2023.07.05] When installing on host, changed to use the `stable/1.2` branch of `travelping/upg-vpp` described in `oai-cn5g-upf-vpp/docker/Dockerfile.*`.
 - [2023.06.18] Added `upf specification release 16` line in `init.conf`. Along with this, the corresponding description was deleted because the correspondence in the case of Open5GS became unnecessary.
 - [2023.06.15] Initial release.
