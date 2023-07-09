@@ -293,6 +293,7 @@ dpdk {
 
 plugins {
     path /usr/lib/x86_64-linux-gnu/vpp_plugins/
+    plugin ikev2_plugin.so { disable }
     plugin dpdk_plugin.so { enable }
     plugin upf_plugin.so { enable }
 }
@@ -352,7 +353,7 @@ vpp#
 <h3 id="verify">Verify interfaces at VPP</h3>
 
 ```
-vpp# show hardware-interfaces
+vpp# show hardware-interfaces 
               Name                Idx   Link  Hardware
 local0                             0    down  local0
   Link speed: unknown
@@ -448,9 +449,9 @@ vpp#
 ```
 
 ```
-vpp# show udp punt 
-IPV4 UDP ports punt : 500, 2152, 4500, 8805
-IPV6 UDP ports punt : 2152, 500, 4500
+vpp# show udp punt         
+IPV4 UDP ports punt : 2152, 8805
+IPV6 UDP ports punt : 2152
 vpp# 
 ```
 
