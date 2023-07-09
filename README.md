@@ -9,6 +9,7 @@ This briefly describes the steps and configuration to build and install [oai-cn5
 - [Simple Overview of VPP-UPF and Data Network Gateway](#overview)
 - [Build OAI UPF (VPP-UPF) on VM-UP](#build)
   - [Clone OAI UPF (VPP-UPF)](#clone)
+  - [Change to build all VPP plugins](#change)
   - [Edit oai-cn5g-upf-vpp/build/scripts/build_helper.upf](#edit)
   - [Install VPP-UPF software dependencies](#depend)
   - [Build VPP-UPF](#build_1)
@@ -110,11 +111,20 @@ Please refer to the following for building OAI UPF (VPP-UPF).
 # git checkout develop
 ```
 
+<h3 id="change">Change to build all VPP plugins</h3>
+
+Rename the patch file so as not to apply the patch for building only `dpdk` and `upf` plugins.
+
+```
+# cd oai-cn5g-upf-vpp/scripts/patches
+# mv build_selected_plugins.patch build_selected_plugins.patch_not_use
+```
+
 <h3 id="edit">Edit oai-cn5g-upf-vpp/build/scripts/build_helper.upf</h3>
 
 ```diff
---- build_helper.upf.orig       2023-06-11 19:29:54.000000000 +0900
-+++ build_helper.upf    2023-07-05 18:48:12.567431731 +0900
+--- build_helper.upf.orig       2023-07-09 08:19:54.945596895 +0900
++++ build_helper.upf    2023-07-09 09:55:03.435811764 +0900
 @@ -122,11 +122,11 @@
  
  add_Travelping_upf_plugin(){
@@ -129,23 +139,17 @@ Please refer to the following for building OAI UPF (VPP-UPF).
    mkdir -p -- $OPENAIRCN_DIR/vpp/patches
    cp -rf $OPENAIRCN_DIR/upg-vpp/upf/ $OPENAIRCN_DIR/vpp/src/plugins/
    cp -rf $OPENAIRCN_DIR/upg-vpp/vpp-patches/* $OPENAIRCN_DIR/vpp/patches
-@@ -153,6 +153,7 @@
+@@ -153,9 +153,7 @@
    $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/bin/vppctl /bin/
    echo_info "Copied binaries to /bin"
    # Copying necessary libraries
-+  $SUDO mkdir /usr/lib/x86_64-linux-gnu/vpp_plugins/
- #  $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/vpp_plugins /usr/lib/x86_64-linux-gnu/vpp_plugins/
-   $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/vpp_plugins/upf_plugin.so /usr/lib/x86_64-linux-gnu/vpp_plugins/
-   $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/vpp_plugins/dpdk_plugin.so /usr/lib/x86_64-linux-gnu/vpp_plugins/
-@@ -161,7 +162,7 @@
+-#  $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/vpp_plugins /usr/lib/x86_64-linux-gnu/vpp_plugins/
+-  $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/vpp_plugins/upf_plugin.so /usr/lib/x86_64-linux-gnu/vpp_plugins/
+-  $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/vpp_plugins/dpdk_plugin.so /usr/lib/x86_64-linux-gnu/vpp_plugins/
++  $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/vpp_plugins /usr/lib/x86_64-linux-gnu/vpp_plugins/
+   $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/libvppinfra.so.21.01.1 /usr/lib/x86_64-linux-gnu/
+   $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/libvnet.so.21.01.1 /usr/lib/x86_64-linux-gnu/
    $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/libvlibmemory.so.21.01.1 /usr/lib/x86_64-linux-gnu/
-   $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/libvlib.so.21.01.1 /usr/lib/x86_64-linux-gnu/
-   $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/libsvm.so.21.01.1 /usr/lib/x86_64-linux-gnu/
--  $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/libnat.so.21.01.1 /usr/lib/x86_64-linux-gnu/
-+#  $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/libnat.so.21.01.1 /usr/lib/x86_64-linux-gnu/
-   $SUDO ldconfig
-   echo_info "Copied libraries to /usr/lib/x86_64-linux-gnu/"
-   if [ $(getent group vpp) ]; then
 ```
 
 <h3 id="depend">Install VPP-UPF software dependencies</h3>
@@ -335,10 +339,6 @@ upf specification release 16
 
 ```
 # /usr/bin/vpp -c /root/openair-upf/startup.conf
-0: vlib_sort_init_exit_functions:160: order constraint fcn 'dns_init' not found
-0: vnet_feature_arc_init:271: feature node 'acl-plugin-out-ip6-fa' not found (before 'ip6-dvr-reinject', arc 'ip6-output')
-0: vnet_feature_arc_init:271: feature node 'nat44-in2out-output' not found (before 'ip4-dvr-reinject', arc 'ip4-output')
-0: vnet_feature_arc_init:271: feature node 'acl-plugin-out-ip4-fa' not found (before 'ip4-dvr-reinject', arc 'ip4-output')
 dpdk             [warn  ]: not enough DPDK crypto resources
 dpdk/cryptodev   [warn  ]: dpdk_cryptodev_init: Not enough cryptodevs
     _______    _        _   _____  ___ 
@@ -352,7 +352,7 @@ vpp#
 <h3 id="verify">Verify interfaces at VPP</h3>
 
 ```
-vpp# show hardware-interfaces 
+vpp# show hardware-interfaces
               Name                Idx   Link  Hardware
 local0                             0    down  local0
   Link speed: unknown
@@ -449,8 +449,8 @@ vpp#
 
 ```
 vpp# show udp punt 
-IPV4 UDP ports punt : 2152, 8805
-IPV6 UDP ports punt : 2152
+IPV4 UDP ports punt : 500, 2152, 4500, 8805
+IPV6 UDP ports punt : 2152, 500, 4500
 vpp# 
 ```
 
@@ -478,6 +478,7 @@ I would like to thank the excellent developers and all the contributors of OpenA
 
 <h2 id="changelog">Changelog (summary)</h2>
 
+- [2023.07.09] Changed to build all VPP plugins.
 - [2023.07.05] When installing on host, changed to use the `stable/1.2` branch of `travelping/upg-vpp` described in `oai-cn5g-upf-vpp/docker/Dockerfile.*`.
 - [2023.06.18] Added `upf specification release 16` line in `init.conf`. Along with this, the corresponding description was deleted because the correspondence in the case of Open5GS became unnecessary.
 - [2023.06.15] Initial release.
