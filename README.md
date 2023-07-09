@@ -449,7 +449,7 @@ vpp#
 ```
 
 ```
-vpp# show udp punt         
+vpp# show udp punt
 IPV4 UDP ports punt : 2152, 8805
 IPV6 UDP ports punt : 2152
 vpp# 
