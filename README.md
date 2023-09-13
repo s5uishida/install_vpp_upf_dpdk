@@ -23,6 +23,9 @@ This briefly describes the steps and configuration to build and install [oai-cn5
 - [Run VPP-UPF with DPDK on VM-UP](#run)
   - [Verify interfaces at VPP](#verify)
 - [Setup Data Network Gateway on VM-DN](#setup_dn)
+- [Sample Configurations](#sample_conf)
+  - [For 5G](#5g_conf)
+  - [For 4G](#4g_conf)
 - [Changelog (summary)](#changelog)
 
 ---
@@ -477,8 +480,20 @@ With the above steps, the VPP-UPF environment with DPDK has been constructed.
 You will be able to work VPP-UPF with Open5GS and free5GC.
 I would like to thank the excellent developers and all the contributors of OpenAir CN 5G for UPF, UPG-VPP and DPDK.
 
+<h2 id="sample_conf">Sample Configurations</h2>
+
+<h3 id="5g_conf">For 5G</h3>
+
+- [Open5GS 5GC & UERANSIM UE / RAN Sample Configuration - VPP-UPF with DPDK](https://github.com/s5uishida/open5gs_5gc_ueransim_vpp_upf_dpdk_sample_config)
+- [free5GC 5GC & UERANSIM UE / RAN Sample Configuration - VPP-UPF with DPDK](https://github.com/s5uishida/free5gc_ueransim_vpp_upf_dpdk_sample_config)
+
+<h3 id="4g_conf">For 4G</h3>
+
+- [Open5GS EPC & srsRAN 4G with ZeroMQ UE / RAN Sample Configuration - VPP-UPF(PGW-U) with DPDK](https://github.com/s5uishida/open5gs_epc_srsran_vpp_upf_dpdk_sample_config)
+
 <h2 id="changelog">Changelog (summary)</h2>
 
+- [2023.09.13] Added sample configurations.
 - [2023.07.09] Changed to build all VPP plugins.
 - [2023.07.05] When installing on host, changed to use the `stable/1.2` branch of `travelping/upg-vpp` described in `oai-cn5g-upf-vpp/docker/Dockerfile.*`.
 - [2023.06.18] Added `upf specification release 16` line in `init.conf`. Along with this, the corresponding description was deleted because the correspondence in the case of Open5GS became unnecessary.
