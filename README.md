@@ -308,7 +308,7 @@ cpu {
   corelist-workers 1-3
 }
 ```
-As a result, each of the three CPU cores has a usage rate of 100% (300% in total). When displayed using the top command, it looks like the following.
+As a result, each of the three CPU cores has a usage rate of 100% (300% in total). When displayed using the `top` command, it looks like the following.
 ```
 top - 22:52:57 up 4 min,  4 users,  load average: 2.73, 1.22, 0.47
 Tasks: 151 total,   2 running, 149 sleeping,   0 stopped,   0 zombie
