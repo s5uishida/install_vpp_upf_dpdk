@@ -301,6 +301,26 @@ plugins {
     plugin upf_plugin.so { enable }
 }
 ```
+For example, if you prepare four CPU cores and want to assign CPU core (`#0`) to `main-core` and three CPU cores (`#1-3`) to `corelist-workers`, configure the `startup.conf` file as follows.
+```
+cpu {
+  main-core 0
+  corelist-workers 1-3
+}
+```
+As a result, each of the three CPU cores has a usage rate of 100% (300% in total). When displayed using the top command, it looks like the following.
+```
+top - 22:52:57 up 4 min,  4 users,  load average: 2.73, 1.22, 0.47
+Tasks: 151 total,   2 running, 149 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 75.2 us,  0.2 sy,  0.0 ni, 24.5 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+MiB Mem :   7935.3 total,   6126.9 free,   1170.5 used,    638.0 buff/cache
+MiB Swap:      0.0 total,      0.0 free,      0.0 used.   6524.8 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+   1204 root      20   0   82.2g 981656  29860 R 302.0  12.1   5:48.50 vpp_main <--
+    102 root      20   0       0      0      0 I   0.3   0.0   0:00.11 kworker/2:1-events
+...
+```
 
 - `/root/openair-upf/init.conf`
 
