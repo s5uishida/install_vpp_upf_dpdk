@@ -4,7 +4,9 @@ This briefly describes the steps and configuration to build and install [oai-cn5
 
 ---
 
-<h2 id="toc">Table of Contents</h2>
+<a id="toc"></a>
+
+## Table of Contents
 
 - [Simple Overview of VPP-UPF and Data Network Gateway](#overview)
 - [Build OAI UPF (VPP-UPF) on VM-UP](#build)
@@ -30,7 +32,9 @@ This briefly describes the steps and configuration to build and install [oai-cn5
 
 ---
 
-<h2 id="overview">Simple Overview of VPP-UPF and Data Network Gateway</h2>
+<a id="overview"></a>
+
+## Simple Overview of VPP-UPF and Data Network Gateway
 
 This describes a simple configuration of VPP-UPF and Data Network Gateway, focusing on U-Plane.
 **Note that this configuration is implemented with Virtualbox VMs.**
@@ -101,12 +105,16 @@ Set network instance to `internet`.
 | --- |
 | internet |
 
-<h2 id="build">Build OAI UPF (VPP-UPF) on VM-UP</h2>
+<a id="build"></a>
+
+## Build OAI UPF (VPP-UPF) on VM-UP
 
 Please refer to the following for building OAI UPF (VPP-UPF).
 - VPP-UPF - OpenAir CN 5G for UPF v1.5.1 (2023.06.14) - https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-upf-vpp/-/blob/master/docs/INSTALL_ON_HOST.md
 
-<h3 id="clone">Clone OAI UPF (VPP-UPF)</h3>
+<a id="clone"></a>
+
+### Clone OAI UPF (VPP-UPF)
 
 ```
 # git clone https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-upf-vpp.git
@@ -114,7 +122,9 @@ Please refer to the following for building OAI UPF (VPP-UPF).
 # git checkout develop
 ```
 
-<h3 id="change">Change to build all VPP plugins</h3>
+<a id="change"></a>
+
+### Change to build all VPP plugins
 
 Rename the patch file so as not to apply the patch for building only `dpdk` and `upf` plugins.
 
@@ -123,7 +133,9 @@ Rename the patch file so as not to apply the patch for building only `dpdk` and 
 # mv build_selected_plugins.patch build_selected_plugins.patch_not_use
 ```
 
-<h3 id="edit">Edit oai-cn5g-upf-vpp/build/scripts/build_helper.upf</h3>
+<a id="edit"></a>
+
+### Edit oai-cn5g-upf-vpp/build/scripts/build_helper.upf
 
 ```diff
 --- build_helper.upf.orig       2023-07-09 08:19:54.945596895 +0900
@@ -155,38 +167,50 @@ Rename the patch file so as not to apply the patch for building only `dpdk` and 
    $SUDO cp -rf $OPENAIRCN_DIR/vpp/build-root/install-vpp-native/vpp/lib/libvlibmemory.so.21.01.1 /usr/lib/x86_64-linux-gnu/
 ```
 
-<h3 id="depend">Install VPP-UPF software dependencies</h3>
+<a id="depend"></a>
+
+### Install VPP-UPF software dependencies
 
 ```
 # cd oai-cn5g-upf-vpp/build/scripts
 # ./build_vpp_upf -I -f
 ```
 
-<h3 id="build_1">Build VPP-UPF</h3>
+<a id="build_1"></a>
+
+### Build VPP-UPF
 
 ```
 # cd oai-cn5g-upf-vpp/build/scripts
 # ./build_vpp_upf -c -V 
 ```
 
-<h2 id="setup_up">Setup VPP-UPF with DPDK on VM-UP</h2>
+<a id="setup_up"></a>
+
+## Setup VPP-UPF with DPDK on VM-UP
 
 Please refer to the following for setup VPP-UPF with DPDK.
 - VPP-UPF - OpenAir CN 5G for UPF v1.5.1 (2023.06.14) - https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-upf-vpp/-/blob/master/docs/VPP_UPG_WITH_DPDK.md
 
-<h3 id="load_module">Load kernel module "uio_pci_generic"</h3>
+<a id="load_module"></a>
+
+### Load kernel module "uio_pci_generic"
 
 ```
 # modprobe uio_pci_generic
 ```
 
-<h3 id="install_dpdk">Install DPDK</h3>
+<a id="install_dpdk"></a>
+
+### Install DPDK
 
 ```
 # apt install dpdk
 ```
 
-<h3 id="check_interfaces">Check Interfaces</h3>
+<a id="check_interfaces"></a>
+
+### Check Interfaces
 
 ```
 # lshw -c network -businfo
@@ -199,7 +223,9 @@ pci@0000:00:0a.0  enp0s10     network     82540EM Gigabit Ethernet Controller
 pci@0000:00:10.0  enp0s16     network     82540EM Gigabit Ethernet Controller
 ```
 
-<h3 id="bind_interfaces">Bind enp0s9/enp0s10/enp0s16 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)</h3>
+<a id="bind_interfaces"></a>
+
+### Bind enp0s9/enp0s10/enp0s16 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)
 
 ```
 # dpdk-devbind.py -b uio_pci_generic  0000:00:09.0  --force
@@ -207,7 +233,9 @@ pci@0000:00:10.0  enp0s16     network     82540EM Gigabit Ethernet Controller
 # dpdk-devbind.py -b uio_pci_generic  0000:00:10.0  --force
 ```
 
-<h3 id="verify_binding">Verify DPDK binding</h3>
+<a id="verify_binding"></a>
+
+### Verify DPDK binding
 
 ```
 # lshw -c network -businfo
@@ -258,7 +286,9 @@ No 'Regex' devices detected
 ===========================
 ```
 
-<h3 id="conf">Create configuration files</h3>
+<a id="conf"></a>
+
+### Create configuration files
 
 Create `/root/openair-upf` directory and put the configuration files there.
 
@@ -359,7 +389,9 @@ upf specification release 16
 ```
 `FTUP: Supported` is set in `UP Function Features` of `PFCP Association Setup Response` from VPP-UPF.
 
-<h2 id="run">Run VPP-UPF with DPDK on VM-UP</h2>
+<a id="run"></a>
+
+## Run VPP-UPF with DPDK on VM-UP
 
 ```
 # /usr/bin/vpp -c /root/openair-upf/startup.conf
@@ -373,7 +405,9 @@ dpdk/cryptodev   [warn  ]: dpdk_cryptodev_init: Not enough cryptodevs
 vpp# 
 ```
 
-<h3 id="verify">Verify interfaces at VPP</h3>
+<a id="verify"></a>
+
+### Verify interfaces at VPP
 
 ```
 vpp# show hardware-interfaces 
@@ -478,7 +512,9 @@ IPV6 UDP ports punt : 2152
 vpp# 
 ```
 
-<h2 id="setup_dn">Setup Data Network Gateway on VM-DN</h2>
+<a id="setup_dn"></a>
+
+## Setup Data Network Gateway on VM-DN
 
 First, uncomment the next line in the `/etc/sysctl.conf` file and reflect it in the OS.
 ```
@@ -500,18 +536,26 @@ With the above steps, the VPP-UPF environment with DPDK has been constructed.
 You will be able to work VPP-UPF with Open5GS and free5GC.
 I would like to thank the excellent developers and all the contributors of OpenAir CN 5G for UPF, UPG-VPP and DPDK.
 
-<h2 id="sample_conf">Sample Configurations</h2>
+<a id="sample_conf"></a>
 
-<h3 id="5g_conf">For 5G</h3>
+## Sample Configurations
+
+<a id="5g_conf"></a>
+
+### For 5G
 
 - [Open5GS 5GC & UERANSIM UE / RAN Sample Configuration - VPP-UPF with DPDK](https://github.com/s5uishida/open5gs_5gc_ueransim_vpp_upf_dpdk_sample_config)
 - [free5GC 5GC & UERANSIM UE / RAN Sample Configuration - VPP-UPF with DPDK](https://github.com/s5uishida/free5gc_ueransim_vpp_upf_dpdk_sample_config)
 
-<h3 id="4g_conf">For 4G</h3>
+<a id="4g_conf"></a>
+
+### For 4G
 
 - [Open5GS EPC & srsRAN 4G with ZeroMQ UE / RAN Sample Configuration - VPP-UPF(PGW-U) with DPDK](https://github.com/s5uishida/open5gs_epc_srsran_vpp_upf_dpdk_sample_config)
 
-<h2 id="changelog">Changelog (summary)</h2>
+<a id="changelog"></a>
+
+## Changelog (summary)
 
 - [2023.09.13] Added sample configurations.
 - [2023.07.09] Changed to build all VPP plugins.
