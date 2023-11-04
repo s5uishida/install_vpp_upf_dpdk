@@ -16,8 +16,8 @@ This briefly describes the steps and configuration to build and install [oai-cn5
   - [Install VPP-UPF software dependencies](#depend)
   - [Build VPP-UPF](#build_1)
 - [Setup VPP-UPF with DPDK on VM-UP](#setup_up)
+  - [Install dpdk-devbind.py](#install_dpdk)
   - [Load kernel module "uio_pci_generic"](#load_module)
-  - [Install DPDK](#install_dpdk)
   - [Check Interfaces](#check_interfaces)
   - [Bind enp0s9/enp0s10/enp0s16 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)](#bind_interfaces)
   - [Verify DPDK binding](#verify_binding)
@@ -192,20 +192,21 @@ Rename the patch file so as not to apply the patch for building only `dpdk` and 
 Please refer to the following for setup VPP-UPF with DPDK.
 - VPP-UPF - OpenAir CN 5G for UPF v1.5.1 (2023.05.15) - https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-upf-vpp/-/blob/master/docs/VPP_UPG_WITH_DPDK.md
 
+<a id="install_dpdk"></a>
+
+### Install dpdk-devbind.py
+
+```
+# wget https://raw.githubusercontent.com/DPDK/dpdk/main/usertools/dpdk-devbind.py -O /usr/local/bin/dpdk-devbind.py
+# chmod +x /usr/local/bin/dpdk-devbind.py
+```
+
 <a id="load_module"></a>
 
 ### Load kernel module "uio_pci_generic"
 
 ```
 # modprobe uio_pci_generic
-```
-
-<a id="install_dpdk"></a>
-
-### Install DPDK
-
-```
-# apt install dpdk
 ```
 
 <a id="check_interfaces"></a>
