@@ -567,11 +567,11 @@ I would like to thank the excellent developers and all the contributors of OpenA
 The steps to build [travelingping/upg-vpp](https://github.com/travelping/upg-vpp) v1.10.0 on the host are as follows.
 
 **FPP-VPP information required to build UPG-VPP v1.10.0**  
-- https://github.com/travelping/upg-vpp/blob/master/vpp.spec
+- https://github.com/travelping/upg-vpp/blob/v1.10.0/vpp.spec
 
 **VPP and OS information required to build FPP-VPP v22.10.10**  
-- https://github.com/travelping/fpp-vpp/blob/main/vpp.spec
-- https://github.com/travelping/fpp-vpp/blob/main/Dockerfile
+- https://github.com/travelping/fpp-vpp/blob/v22.10.10/vpp.spec
+- https://github.com/travelping/fpp-vpp/blob/v22.10.10/Dockerfile
 
 VM-UP is as follows.
 
