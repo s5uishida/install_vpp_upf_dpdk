@@ -676,6 +676,11 @@ There is no change.
 
 ### Run UPG-VPP with DPDK
 
+First, create group `vpp` if it doesn't exist.
+```
+# addgroup vpp
+```
+Then run UPG-VPP with DPDK.
 ```
 # /root/vpp/build-root/install-vpp-native/vpp/bin/vpp -c /root/openair-upf/startup.conf
 /root/vpp/build-root/install-vpp-native/vpp/bin/vpp: Relink `/lib/x86_64-linux-gnu/libhs_runtime.so.5' with `/lib/x86_64-linux-gnu/libhs.so.5' for IFUNC symbol `dbIsValid'
