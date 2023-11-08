@@ -28,6 +28,12 @@ This briefly describes the steps and configuration to build and install [oai-cn5
 - [Sample Configurations](#sample_conf)
   - [For 5G](#5g_conf)
   - [For 4G](#4g_conf)
+- [Annex 1. Build and Configure UPG-VPP v1.10.0 on VM-UP](#annex_1)
+  - [Install required packages](#install_packages)
+  - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.10](#build_vpp)
+  - [Build UPG-VPP v1.10.0](#build_upg_vpp)
+  - [Changes in configuration files of UPG-VPP](#changes_up)
+  - [Run UPG-VPP with DPDK](#run_upg_vpp)
 - [Changelog (summary)](#changelog)
 
 ---
@@ -554,10 +560,132 @@ I would like to thank the excellent developers and all the contributors of OpenA
 
 - [Open5GS EPC & srsRAN 4G with ZeroMQ UE / RAN Sample Configuration - VPP-UPF(PGW-U) with DPDK](https://github.com/s5uishida/open5gs_epc_srsran_vpp_upf_dpdk_sample_config)
 
+<a id="annex_1"></a>
+
+## Annex 1. Build and Configure UPG-VPP v1.10.0 on VM-UP
+
+The steps to build [travelingping/upg-vpp](https://github.com/travelping/upg-vpp) v1.10.0 on the host are as follows.
+
+VM-UP is as follows.
+
+| VM | SW & Role | IP address | OS | CPU<br>(Min) | Memory<br>(Min) | HDD<br>(Min) |
+| --- | --- | --- | --- | --- | --- | --- |
+| VM-UP | UPG-VPP U-Plane | 192.168.0.151/24 | Ubuntu **20.04** | 2 | 8GB | 20GB |
+
+<a id="install_packages"></a>
+
+### Install required packages
+
+```
+# apt install build-essential git meson ninja-build libhyperscan-dev
+```
+
+<a id="build_vpp"></a>
+
+### Build VPP v22.10 applied with patches of FPP-VPP v22.10.10
+
+```
+# cd ~
+# git clone https://github.com/travelping/fpp-vpp.git
+# cd fpp-vpp
+# git checkout refs/tags/v22.10.10
+```
+```
+# cd ~
+# git clone https://github.com/FDio/vpp.git
+# cd vpp
+# git checkout stable/2210
+# git reset --hard 07e0c05e698cf5ffd1e2d2de0296d1907519dc3d
+# git am ../fpp-vpp/vpp-patches/*.patch
+# make install-dep
+# make install-ext-deps
+# make build-release
+```
+If you want to build in debug mode, make as follows.
+```
+# make build
+```
+
+<a id="build_upg_vpp"></a>
+
+### Build UPG-VPP v1.10.0
+
+```
+# cd ~
+# git clone https://github.com/travelping/upg-vpp.git
+# cd upg-vpp
+# git checkout refs/tags/v1.10.0
+# make version
+# mkdir build
+# cd build
+# cmake -DVPP_HOME=/root/vpp/build-root/install-vpp-native/vpp ..
+# make
+# cp upf_plugin.so /root/vpp/build-root/install-vpp-native/vpp/lib/x86_64-linux-gnu/vpp_plugins
+```
+Now the UPG-VPP was built in `/root/vpp/build-root/install-vpp-native/vpp`.
+
+If you built VPP in debug mode, do the following:
+```
+...
+# cmake -DVPP_HOME=/root/vpp/build-root/install-vpp_debug-native/vpp ..
+# make
+# cp upf_plugin.so /root/vpp/build-root/install-vpp_debug-native/vpp/lib/x86_64-linux-gnu/vpp_plugins
+```
+
+<a id="changes_up"></a>
+
+### Changes in configuration files of UPG-VPP
+
+See [here](#conf) for the original files.
+
+- `openair-upf/startup.conf`  
+
+```diff
+--- startup.conf.orig   2023-07-09 11:59:18.000000000 +0900
++++ startup.conf        2023-11-09 00:01:46.830150314 +0900
+@@ -1,3 +1,5 @@
++heapsize 2G
++
+ unix {
+   nodaemon
+   log /tmp/vpp.log
+@@ -28,8 +30,8 @@
+ }
+ 
+ plugins {
+-    path  /usr/lib/x86_64-linux-gnu/vpp_plugins/
+-    plugin ikev2_plugin.so { disable }
++    path  /root/vpp/build-root/install-vpp-native/vpp/lib/x86_64-linux-gnu/vpp_plugins/
++    plugin oddbuf_plugin.so { enable }
+     plugin dpdk_plugin.so { enable }
+     plugin upf_plugin.so { enable }
+ }
+```
+
+- `openair-upf/init.conf`  
+There is no change.
+
+<a id="run_upg_vpp"></a>
+
+### Run UPG-VPP with DPDK
+
+```
+# /root/vpp/build-root/install-vpp-native/vpp/bin/vpp -c /root/openair-upf/startup.conf
+/root/vpp/build-root/install-vpp-native/vpp/bin/vpp: Relink `/lib/x86_64-linux-gnu/libhs_runtime.so.5' with `/lib/x86_64-linux-gnu/libhs.so.5' for IFUNC symbol `dbIsValid'
+perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
+    _______    _        _   _____  ___ 
+ __/ __/ _ \  (_)__    | | / / _ \/ _ \
+ _/ _// // / / / _ \   | |/ / ___/ ___/
+ /_/ /____(_)_/\___/   |___/_/  /_/    
+
+vpp# 
+```
+
 <a id="changelog"></a>
 
 ## Changelog (summary)
 
+- [2023.11.08] Added build instructions for UPG-VPP v1.10.0.
 - [2023.09.13] Added sample configurations.
 - [2023.07.09] Changed to build all VPP plugins.
 - [2023.07.05] When installing on host, changed to use the `stable/1.2` branch of `travelping/upg-vpp` described in `oai-cn5g-upf-vpp/docker/Dockerfile.*`.
