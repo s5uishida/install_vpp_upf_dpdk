@@ -685,7 +685,7 @@ vpp#
 
 ## Changelog (summary)
 
-- [2023.11.08] Added build instructions for UPG-VPP v1.10.0.
+- [2023.11.08] Added build instructions for UPG-VPP v1.10.0 on Host.
 - [2023.09.13] Added sample configurations.
 - [2023.07.09] Changed to build all VPP plugins.
 - [2023.07.05] When installing on host, changed to use the `stable/1.2` branch of `travelping/upg-vpp` described in `oai-cn5g-upf-vpp/docker/Dockerfile.*`.
