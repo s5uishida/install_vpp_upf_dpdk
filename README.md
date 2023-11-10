@@ -643,8 +643,6 @@ If you built VPP in debug mode, do the following:
 
 ### Changes in configuration files of UPG-VPP
 
-First, see [here](https://github.com/s5uishida/install_vpp_upf_dpdk#setup_up) for instructions to bind N3, N4, and N6 network interfaces to DPDK compatible driver.
-
 Then see [here](#conf) for the original files.
 
 - `openair-upf/startup.conf`  
@@ -677,6 +675,8 @@ There is no change.
 <a id="run_upg_vpp"></a>
 
 ### Run UPG-VPP with DPDK
+
+As a prerequisite, see [here](https://github.com/s5uishida/install_vpp_upf_dpdk#setup_up) for instructions on binding N3, N4, and N6 network interfaces to DPDK compatible driver.
 
 First, create group `vpp` if it doesn't exist.
 ```
