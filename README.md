@@ -564,6 +564,9 @@ I would like to thank the excellent developers and all the contributors of OpenA
 
 ## Annex 1. Build and Configure UPG-VPP v1.10.0 on VM-UP
 
+For a simple overview of VPP-UPF at the beginning of this article, read **OAI-CN5G-UPF-VPP** as **UPG-VPP**.
+Also, the Ubuntu version has changed from 22.04 to 20.04.
+
 The steps to build [travelingping/upg-vpp](https://github.com/travelping/upg-vpp) v1.10.0 on the host are as follows.
 
 **FPP-VPP information required to build UPG-VPP v1.10.0**  
