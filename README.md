@@ -679,7 +679,7 @@ There is no change.
 
 ### Run UPG-VPP with DPDK
 
-As a prerequisite, see [here](https://github.com/s5uishida/install_vpp_upf_dpdk#setup_up) for instructions on binding N3, N4, and N6 network interfaces to DPDK compatible driver.
+As a prerequisite, see [here](https://github.com/s5uishida/install_vpp_upf_dpdk#setup_up) for instructions on binding N3, N4 and N6 network interfaces to DPDK compatible driver.
 
 First, create group `vpp` if it doesn't exist.
 ```
