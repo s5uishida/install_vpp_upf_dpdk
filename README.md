@@ -610,10 +610,18 @@ VM-UP is as follows.
 # make install-dep
 # make install-ext-deps
 # make build-release
+# cp -r build-root/install-vpp-native/vpp /usr/local/
 ```
 If you want to build in debug mode, make as follows.
 ```
+...
 # make build
+# cp -r build-root/install-vpp_debug-native/vpp /usr/local/
+```
+Then update the search path information for the shared libraries added for VPP.
+```
+# echo "/usr/local/vpp/lib/x86_64-linux-gnu" >> /etc/ld.so.conf.d/vpp.conf
+# ldconfig
 ```
 
 <a id="build_upg_vpp"></a>
@@ -628,19 +636,11 @@ If you want to build in debug mode, make as follows.
 # make version
 # mkdir build
 # cd build
-# cmake -DVPP_HOME=/root/vpp/build-root/install-vpp-native/vpp ..
+# cmake -DVPP_HOME=/usr/local/vpp ..
 # make
-# cp upf_plugin.so /root/vpp/build-root/install-vpp-native/vpp/lib/x86_64-linux-gnu/vpp_plugins
+# cp upf_plugin.so /usr/local/vpp/lib/x86_64-linux-gnu/vpp_plugins
 ```
-Now the UPG-VPP was built in `/root/vpp/build-root/install-vpp-native/vpp`.
-
-If you built VPP in debug mode, do the following:
-```
-...
-# cmake -DVPP_HOME=/root/vpp/build-root/install-vpp_debug-native/vpp ..
-# make
-# cp upf_plugin.so /root/vpp/build-root/install-vpp_debug-native/vpp/lib/x86_64-linux-gnu/vpp_plugins
-```
+Now the UPG-VPP was built in `/usr/local/vpp`.
 
 <a id="changes_up"></a>
 
@@ -652,7 +652,7 @@ Then see [here](#conf) for the original files.
 
 ```diff
 --- startup.conf.orig   2023-07-09 11:59:18.000000000 +0900
-+++ startup.conf        2023-11-09 00:01:46.830150314 +0900
++++ startup.conf        2023-11-12 15:54:33.395276365 +0900
 @@ -1,3 +1,5 @@
 +heapsize 2G
 +
@@ -665,7 +665,7 @@ Then see [here](#conf) for the original files.
  plugins {
 -    path  /usr/lib/x86_64-linux-gnu/vpp_plugins/
 -    plugin ikev2_plugin.so { disable }
-+    path  /root/vpp/build-root/install-vpp-native/vpp/lib/x86_64-linux-gnu/vpp_plugins/
++    path  /usr/local/vpp/lib/x86_64-linux-gnu/vpp_plugins/
 +    plugin oddbuf_plugin.so { enable }
      plugin dpdk_plugin.so { enable }
      plugin upf_plugin.so { enable }
@@ -687,8 +687,8 @@ First, create group `vpp` if it doesn't exist.
 ```
 Then run UPG-VPP with DPDK.
 ```
-# /root/vpp/build-root/install-vpp-native/vpp/bin/vpp -c /root/openair-upf/startup.conf
-/root/vpp/build-root/install-vpp-native/vpp/bin/vpp: Relink `/lib/x86_64-linux-gnu/libhs_runtime.so.5' with `/lib/x86_64-linux-gnu/libhs.so.5' for IFUNC symbol `dbIsValid'
+# /usr/local/vpp/bin/vpp -c /root/openair-upf/startup.conf
+/usr/local/vpp/bin/vpp: Relink `/lib/x86_64-linux-gnu/libhs_runtime.so.5' with `/lib/x86_64-linux-gnu/libhs.so.5' for IFUNC symbol `dbIsValid'
 perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
     _______    _        _   _____  ___ 
  __/ __/ _ \  (_)__    | | / / _ \/ _ \
