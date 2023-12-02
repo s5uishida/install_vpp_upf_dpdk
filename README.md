@@ -17,10 +17,12 @@ This briefly describes the steps and configuration to build and install [oai-cn5
   - [Build VPP-UPF](#build_1)
 - [Setup VPP-UPF with DPDK on VM-UP](#setup_up)
   - [Install dpdk-devbind.py](#install_dpdk)
-  - [Load kernel module "uio_pci_generic"](#load_module)
-  - [Check Interfaces](#check_interfaces)
-  - [Bind enp0s9/enp0s10/enp0s16 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)](#bind_interfaces)
-  - [Verify DPDK binding](#verify_binding)
+  - [Case of using kernel module "uio_pci_generic"](#uio_pci_generic)
+    - [Load kernel module "uio_pci_generic"](#load_module)
+    - [Check Interfaces](#check_interfaces)
+    - [Bind enp0s9/enp0s10/enp0s16 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)](#bind_interfaces)
+    - [Verify DPDK binding](#verify_binding)
+  - [Case of using kernel module "vfio-pci"](#vfio_pci)
   - [Create configuration files](#conf)
 - [Run VPP-UPF with DPDK on VM-UP](#run)
   - [Verify interfaces at VPP](#verify)
@@ -207,9 +209,13 @@ Please refer to the following for setup VPP-UPF with DPDK.
 # chmod +x /usr/local/bin/dpdk-devbind.py
 ```
 
+<a id="uio_pci_generic"></a>
+
+### Case of using kernel module "uio_pci_generic"
+
 <a id="load_module"></a>
 
-### Load kernel module "uio_pci_generic"
+#### Load kernel module "uio_pci_generic"
 
 ```
 # modprobe uio_pci_generic
@@ -217,7 +223,7 @@ Please refer to the following for setup VPP-UPF with DPDK.
 
 <a id="check_interfaces"></a>
 
-### Check Interfaces
+#### Check Interfaces
 
 ```
 # lshw -c network -businfo
@@ -232,7 +238,7 @@ pci@0000:00:10.0  enp0s16     network     82540EM Gigabit Ethernet Controller
 
 <a id="bind_interfaces"></a>
 
-### Bind enp0s9/enp0s10/enp0s16 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)
+#### Bind enp0s9/enp0s10/enp0s16 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)
 
 ```
 # dpdk-devbind.py -b uio_pci_generic  0000:00:09.0  --force
@@ -242,7 +248,7 @@ pci@0000:00:10.0  enp0s16     network     82540EM Gigabit Ethernet Controller
 
 <a id="verify_binding"></a>
 
-### Verify DPDK binding
+#### Verify DPDK binding
 
 ```
 # lshw -c network -businfo
@@ -292,6 +298,13 @@ No 'Misc (rawdev)' devices detected
 No 'Regex' devices detected
 ===========================
 ```
+
+<a id="vfio_pci"></a>
+
+### Case of using kernel module "vfio-pci"
+
+When using the kernel built-in **vfio-pci** module, please down the `enp0s9`/`enp0s10`/`enp0s16` interfaces in advance.
+There are no other settings.
 
 <a id="conf"></a>
 
@@ -702,6 +715,7 @@ vpp#
 
 ## Changelog (summary)
 
+- [2023.12.02] Added case of using kernel built-in **vfio-pci** module.
 - [2023.11.08] Added build instructions for UPG-VPP v1.10.0 on Host.
 - [2023.09.13] Added sample configurations.
 - [2023.07.09] Changed to build all VPP plugins.
