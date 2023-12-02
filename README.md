@@ -306,7 +306,7 @@ No 'Regex' devices detected
 When using the kernel built-in **vfio-pci** module, please down the `enp0s9`/`enp0s10`/`enp0s16` interfaces in advance.
 And, refer to [this](https://doc.dpdk.org/guides/linux_gsg/linux_drivers.html) and set the kernel to IOMMU mode.
 Alternatively, it can be used in No-IOMMU mode.
-Then, these interfaces are under DPDK control by running vpp without explicit DPDK binding.
+Then, these interfaces are under DPDK control by running `vpp` without explicit **vfio-pci** binding.
 
 <a id="conf"></a>
 
