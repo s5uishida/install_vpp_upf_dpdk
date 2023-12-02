@@ -31,6 +31,7 @@ This briefly describes the steps and configuration to build and install [oai-cn5
   - [For 5G](#5g_conf)
   - [For 4G](#4g_conf)
 - [Annex 1. Build and Configure UPG-VPP v1.10.0 on VM-UP](#annex_1)
+  - [Confirmed Version List](#ver_list)
   - [Install required packages](#install_packages)
   - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.10](#build_vpp)
   - [Build UPG-VPP v1.10.0](#build_upg_vpp)
@@ -582,20 +583,22 @@ I would like to thank the excellent developers and all the contributors of OpenA
 For a simple overview of VPP-UPF at the beginning of this article, read **OAI-CN5G-UPF-VPP** as **UPG-VPP**.
 Also, the Ubuntu version has changed from 22.04 to 20.04.
 
-The steps to build [travelingping/upg-vpp](https://github.com/travelping/upg-vpp) v1.10.0 on the host are as follows.
-
-**FPP-VPP information required to build UPG-VPP v1.10.0**  
-- https://github.com/travelping/upg-vpp/blob/v1.10.0/vpp.spec
-
-**VPP and OS information required to build FPP-VPP v22.10.10**  
-- https://github.com/travelping/fpp-vpp/blob/v22.10.10/vpp.spec
-- https://github.com/travelping/fpp-vpp/blob/v22.10.10/Dockerfile
-
 VM-UP is as follows.
 
 | VM | SW & Role | IP address | OS | CPU<br>(Min) | Memory<br>(Min) | HDD<br>(Min) |
 | --- | --- | --- | --- | --- | --- | --- |
 | VM-UP | UPG-VPP U-Plane | 192.168.0.151/24 | Ubuntu **20.04** | 2 | 8GB | 20GB |
+
+<a id="ver_list"></a>
+
+### Confirmed Version List
+
+This build instruction is based on `vpp.spec` of [UPG-VPP](https://github.com/travelping/upg-vpp), and `vpp.spec` and `Dockerfile` of [FPP-VPP](https://github.com/travelping/fpp-vpp).
+I simply confirmed the operation of the following versions.
+
+| UPG-VPP | FPP-VPP | VPP | Iperf3 |
+| --- | --- | --- | -- |
+| `tag:v1.10.0` | `tag:v22.10.10` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | NG |
 
 <a id="install_packages"></a>
 
