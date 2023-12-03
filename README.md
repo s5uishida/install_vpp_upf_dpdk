@@ -4,6 +4,10 @@ This briefly describes the steps and configuration to build and install [oai-cn5
 
 ---
 
+### [Sample Configurations and Miscellaneous for Mobile Network](https://github.com/s5uishida/sample_config_misc_for_mobile_network)
+
+---
+
 <a id="toc"></a>
 
 ## Table of Contents
