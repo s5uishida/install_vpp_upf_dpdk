@@ -600,7 +600,7 @@ VM-UP is as follows.
 This build instruction is based on `vpp.spec` of [UPG-VPP](https://github.com/travelping/upg-vpp), and `vpp.spec` and `Dockerfile` of [FPP-VPP](https://github.com/travelping/fpp-vpp).
 I simply confirmed the operation of the following versions.
 
-| UPG-VPP | FPP-VPP | VPP | Iperf3 |
+| UPG-VPP | FPP-VPP | VPP | iPerf3 |
 | --- | --- | --- | -- |
 | `tag:v1.11.0-rc.2` | `tag:v22.10.11` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | OK |
 | `tag:v1.10.0` | `tag:v22.10.10` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | NG |
