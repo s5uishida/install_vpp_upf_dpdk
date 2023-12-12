@@ -34,11 +34,11 @@ This briefly describes the steps and configuration to build and install [oai-cn5
 - [Sample Configurations](#sample_conf)
   - [For 5G](#5g_conf)
   - [For 4G](#4g_conf)
-- [Annex 1. Build and Configure UPG-VPP v1.11.0-rc.2 on VM-UP](#annex_1)
+- [Annex 1. Build and Configure UPG-VPP v1.11.0 on VM-UP](#annex_1)
   - [Confirmed Version List](#ver_list)
   - [Install required packages](#install_packages)
   - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.11](#build_vpp)
-  - [Build UPG-VPP v1.11.0-rc.2](#build_upg_vpp)
+  - [Build UPG-VPP v1.11.0](#build_upg_vpp)
   - [Changes in configuration files of UPG-VPP](#changes_up)
   - [Run UPG-VPP with DPDK](#run_upg_vpp)
 - [Changelog (summary)](#changelog)
@@ -582,7 +582,7 @@ I would like to thank the excellent developers and all the contributors of OpenA
 
 <a id="annex_1"></a>
 
-## Annex 1. Build and Configure UPG-VPP v1.11.0-rc.2 on VM-UP
+## Annex 1. Build and Configure UPG-VPP v1.11.0 on VM-UP
 
 For a simple overview of VPP-UPF at the beginning of this article, read **OAI-CN5G-UPF-VPP** as **UPG-VPP**.
 Also, the Ubuntu version has changed from 22.04 to 20.04.
@@ -602,7 +602,7 @@ I simply confirmed the operation of the following versions.
 
 | UPG-VPP | FPP-VPP | VPP | iPerf3 |
 | --- | --- | --- | -- |
-| `tag:v1.11.0-rc.2` | `tag:v22.10.11` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | OK |
+| `tag:v1.11.0` | `tag:v22.10.11` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | OK |
 | `tag:v1.10.0` | `tag:v22.10.10` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | NG |
 
 <a id="install_packages"></a>
@@ -649,13 +649,13 @@ Then update the search path information for the shared libraries added for VPP.
 
 <a id="build_upg_vpp"></a>
 
-### Build UPG-VPP v1.11.0-rc.2
+### Build UPG-VPP v1.11.0
 
 ```
 # cd ~
 # git clone https://github.com/travelping/upg-vpp.git
 # cd upg-vpp
-# git checkout refs/tags/v1.11.0-rc.2
+# git checkout refs/tags/v1.11.0
 # make version
 # mkdir build
 # cd build
@@ -725,6 +725,7 @@ vpp#
 
 ## Changelog (summary)
 
+- [2023.12.12] There is no change from `v1.11.0-rc.2`, and it has been tagged as `v1.11.0`.
 - [2023.12.03] Updated to `v1.11.0-rc.2` tag.
 - [2023.12.02] Added case of using kernel built-in **vfio-pci** module.
 - [2023.11.08] Added build instructions for UPG-VPP v1.10.0 on Host.
