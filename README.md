@@ -34,11 +34,11 @@ This briefly describes the steps and configuration to build and install [oai-cn5
 - [Sample Configurations](#sample_conf)
   - [For 5G](#5g_conf)
   - [For 4G](#4g_conf)
-- [Annex 1. Build and Configure UPG-VPP v1.11.0 on VM-UP](#annex_1)
+- [Annex 1. Build and Configure UPG-VPP v1.12.0 on VM-UP](#annex_1)
   - [Confirmed Version List](#ver_list)
   - [Install required packages](#install_packages)
-  - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.11](#build_vpp)
-  - [Build UPG-VPP v1.11.0](#build_upg_vpp)
+  - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.12](#build_vpp)
+  - [Build UPG-VPP v1.12.0](#build_upg_vpp)
   - [Changes in configuration files of UPG-VPP](#changes_up)
   - [Run UPG-VPP with DPDK](#run_upg_vpp)
 - [Changelog (summary)](#changelog)
@@ -582,7 +582,7 @@ I would like to thank the excellent developers and all the contributors of OpenA
 
 <a id="annex_1"></a>
 
-## Annex 1. Build and Configure UPG-VPP v1.11.0 on VM-UP
+## Annex 1. Build and Configure UPG-VPP v1.12.0 on VM-UP
 
 For a simple overview of VPP-UPF at the beginning of this article, read **OAI-CN5G-UPF-VPP** as **UPG-VPP**.
 Also, the Ubuntu version has changed from 22.04 to 20.04.
@@ -602,6 +602,7 @@ I simply confirmed the operation of the following versions.
 
 | UPG-VPP | FPP-VPP | VPP | iPerf3 |
 | --- | --- | --- | -- |
+| `tag:v1.12.0` | `tag:v22.10.12` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | OK |
 | `tag:v1.11.0` | `tag:v22.10.11` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | OK |
 | `tag:v1.10.0` | `tag:v22.10.10` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | NG |
 
@@ -615,13 +616,13 @@ I simply confirmed the operation of the following versions.
 
 <a id="build_vpp"></a>
 
-### Build VPP v22.10 applied with patches of FPP-VPP v22.10.11
+### Build VPP v22.10 applied with patches of FPP-VPP v22.10.12
 
 ```
 # cd ~
 # git clone https://github.com/travelping/fpp-vpp.git
 # cd fpp-vpp
-# git checkout refs/tags/v22.10.11
+# git checkout refs/tags/v22.10.12
 ```
 ```
 # cd ~
@@ -649,13 +650,13 @@ Then update the search path information for the shared libraries added for VPP.
 
 <a id="build_upg_vpp"></a>
 
-### Build UPG-VPP v1.11.0
+### Build UPG-VPP v1.12.0
 
 ```
 # cd ~
 # git clone https://github.com/travelping/upg-vpp.git
 # cd upg-vpp
-# git checkout refs/tags/v1.11.0
+# git checkout refs/tags/v1.12.0
 # make version
 # mkdir build
 # cd build
@@ -664,6 +665,11 @@ Then update the search path information for the shared libraries added for VPP.
 # cp upf_plugin.so /usr/local/vpp/lib/x86_64-linux-gnu/vpp_plugins
 ```
 Now the UPG-VPP was built in `/usr/local/vpp`.
+
+**Note.
+UPG-VPP v1.12.0 does not support `PDU Session container`.
+Therefore, some gNodeBs may not accept GTP traffic from UPG-VPP that does not contain `DL PDU SESSION INFORMATION` in the `PDU Session container`.
+In that case, there is a way to try the OAI patch by referring to [here](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1935837642).**
 
 <a id="changes_up"></a>
 
@@ -725,6 +731,7 @@ vpp#
 
 ## Changelog (summary)
 
+- [2024.02.11] Updated to `v1.12.0` tag. Added the information that may be useful when gNodeB does not accept GTP traffic from UPG-VPP.
 - [2023.12.12] There is no change from `v1.11.0-rc.2`, and it has been tagged as `v1.11.0`.
 - [2023.12.03] Updated to `v1.11.0-rc.2` tag.
 - [2023.12.02] Added case of using kernel built-in **vfio-pci** module.
