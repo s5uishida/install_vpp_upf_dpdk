@@ -352,10 +352,10 @@ dpdk {
 }
 
 plugins {
-    path /usr/lib/x86_64-linux-gnu/vpp_plugins/
-    plugin ikev2_plugin.so { disable }
-    plugin dpdk_plugin.so { enable }
-    plugin upf_plugin.so { enable }
+  path /usr/lib/x86_64-linux-gnu/vpp_plugins/
+  plugin ikev2_plugin.so {disable}
+  plugin dpdk_plugin.so {enable}
+  plugin upf_plugin.so {enable}
 }
 ```
 For example, if you prepare four CPU cores and want to assign CPU core (`#0`) to `main-core` and three CPU cores (`#1-3`) to `corelist-workers`, configure the `startup.conf` file as follows.
@@ -692,12 +692,12 @@ Then see [here](#conf) for the original files.
  }
  
  plugins {
--    path  /usr/lib/x86_64-linux-gnu/vpp_plugins/
--    plugin ikev2_plugin.so { disable }
-+    path  /usr/local/vpp/lib/x86_64-linux-gnu/vpp_plugins/
-+    plugin oddbuf_plugin.so { enable }
-     plugin dpdk_plugin.so { enable }
-     plugin upf_plugin.so { enable }
+-  path /usr/lib/x86_64-linux-gnu/vpp_plugins/
+-  plugin ikev2_plugin.so {disable}
++  path /usr/local/vpp/lib/x86_64-linux-gnu/vpp_plugins/
++  plugin oddbuf_plugin.so {enable}
+   plugin dpdk_plugin.so {enable}
+   plugin upf_plugin.so {enable}
  }
 ```
 
