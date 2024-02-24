@@ -39,7 +39,9 @@ This briefly describes the steps and configuration to build and install [oai-cn5
   - [Install required packages](#install_packages)
   - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.12](#build_vpp)
     - [Build binaries for debugging](#build_vpp_debug)
+    - [Install the built packages](#install_vpp_packages)
   - [Build UPG-VPP v1.12.0](#build_upg_vpp)
+    - [Install the built packages](#install_upg_vpp_packages)
   - [Changes in configuration files of UPG-VPP](#changes_up)
   - [Run UPG-VPP with DPDK](#run_upg_vpp)
 - [Changelog (summary)](#changelog)
@@ -673,7 +675,12 @@ If you want to install the built files as packages without manually copying thes
 ```
 # make pkg-deb-debug
 ```
-When installing the built binary packages, first install the following dependent packages.
+
+<a id="install_vpp_packages"></a>
+
+#### Install the built packages
+
+If you want to install the built binary packages, first install the following dependent packages.
 ```
 # apt install libnl-route-3-200 libhyperscan-dev
 ```
@@ -702,6 +709,11 @@ This allows you to operate VPP service using `systemctl`.
 ```
 Now the UPG-VPP was built in `/usr/local/vpp`.
 
+**Note.
+UPG-VPP v1.12.0 does not support `PDU Session container`.
+Therefore, some gNodeBs may not accept GTP traffic from UPG-VPP that does not contain `DL PDU SESSION INFORMATION` in the `PDU Session container`.
+In that case, there is a way to try the OAI patch by referring to [here](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1935837642).**
+
 If you want to install the built `upf_plugin.so` etc as packages without manually copying these, build binary packages as follows.
 ```
 # make package
@@ -710,15 +722,15 @@ If you want to install the built `upf_plugin.so` etc as packages without manuall
 -rw-r--r-- 1 root root 1830264 Feb 23 23:37 upf-plugin_1.12.0_amd64.deb
 -rw-r--r-- 1 root root   38748 Feb 23 23:37 upf-plugin-dev_1.12.0_amd64.deb
 ```
-To install the built packages, do the following.
+
+<a id="install_upg_vpp_packages"></a>
+
+#### Install the built packages
+
+If you want to install the built binary packages, do the following.
 ```
 # dpkg -i *.deb
 ```
-
-**Note.
-UPG-VPP v1.12.0 does not support `PDU Session container`.
-Therefore, some gNodeBs may not accept GTP traffic from UPG-VPP that does not contain `DL PDU SESSION INFORMATION` in the `PDU Session container`.
-In that case, there is a way to try the OAI patch by referring to [here](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1935837642).**
 
 <a id="changes_up"></a>
 
