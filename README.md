@@ -45,6 +45,7 @@ This briefly describes the steps and configuration to build and install [oai-cn5
   - [Changes in configuration files of UPG-VPP](#changes_up)
     - [Changes when installing the built packages](#changes_up_pkg)
   - [Run UPG-VPP with DPDK](#run_upg_vpp)
+    - [Run UPG-VPP when installing the built packages](#run_upg_vpp_pkg)
 - [Changelog (summary)](#changelog)
 
 ---
@@ -830,6 +831,29 @@ perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_ini
  /_/ /____(_)_/\___/   |___/_/  /_/    
 
 vpp# 
+```
+
+<a id="run_upg_vpp_pkg"></a>
+
+#### Run UPG-VPP when installing the built packages
+
+```
+# systemctl restart vpp
+# systemctl status vpp
+● vpp.service - vector packet processing engine
+     Loaded: loaded (/lib/systemd/system/vpp.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sat 2024-02-24 13:41:30 JST; 4s ago
+    Process: 3364 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
+   Main PID: 3370 (vpp)
+      Tasks: 2 (limit: 9423)
+     Memory: 1.3G
+     CGroup: /system.slice/vpp.service
+             └─3370 /usr/bin/vpp -c /etc/vpp/startup.conf
+
+Feb 24 13:41:30 upg-vpp-01-pkg-debug systemd[1]: Starting vector packet processing engine...
+Feb 24 13:41:30 upg-vpp-01-pkg-debug systemd[1]: Started vector packet processing engine.
+Feb 24 13:41:31 upg-vpp-01-pkg-debug vpp[3370]: /usr/bin/vpp: Relink `/lib/x86_64-linux-gnu/libhs_runtime.so.5' with `/lib/x86_64-linux-gnu/libhs.so.5' for IFUNC symbol `dbIsValid'
+Feb 24 13:41:31 upg-vpp-01-pkg-debug vpp[3370]: perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
 ```
 
 <a id="changelog"></a>
