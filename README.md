@@ -680,7 +680,7 @@ If you want to install the built files as packages without manually copying thes
 
 #### Install the built VPP packages
 
-If you want to install the built VPP packages, first install the following dependent packages.
+If you want to install the VPP packages, first install the following dependent packages.
 ```
 # apt install libnl-route-3-200 libhyperscan-dev
 ```
