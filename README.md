@@ -38,6 +38,7 @@ This briefly describes the steps and configuration to build and install [oai-cn5
   - [Confirmed Version List](#ver_list)
   - [Install required packages](#install_packages)
   - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.12](#build_vpp)
+    - [Build binaries for debugging](#build_vpp_debug)
   - [Build UPG-VPP v1.12.0](#build_upg_vpp)
   - [Changes in configuration files of UPG-VPP](#changes_up)
   - [Run UPG-VPP with DPDK](#run_upg_vpp)
@@ -636,16 +637,41 @@ I simply confirmed the operation of the following versions.
 # make build-release
 # cp -r build-root/install-vpp-native/vpp /usr/local/
 ```
+Then update the search path information for the shared libraries added for VPP.
+```
+# echo "/usr/local/vpp/lib/x86_64-linux-gnu" >> /etc/ld.so.conf.d/vpp.conf
+# ldconfig
+```
+If you want to install the built files as packages without manually copying these, create binary packages as follows.
+```
+# make pkg-deb
+...
+# cd build-root
+# ls -l *.deb
+-rw-r--r-- 1 root root   190112 Feb 23 20:04 build-root/libvppinfra_22.10.0-32~g63f2adb7c_amd64.deb
+-rw-r--r-- 1 root root   140728 Feb 23 20:04 libvppinfra-dev_22.10.0-32~g63f2adb7c_amd64.deb
+-rw-r--r-- 1 root root    26216 Feb 23 20:04 python3-vpp-api_22.10.0-32~g63f2adb7c_amd64.deb
+-rw-r--r-- 1 root root  5415424 Feb 23 20:04 vpp_22.10.0-32~g63f2adb7c_amd64.deb
+-rw-r--r-- 1 root root 78370464 Feb 23 20:04 vpp-dbg_22.10.0-32~g63f2adb7c_amd64.deb
+-rw-r--r-- 1 root root  1334060 Feb 23 20:04 vpp-dev_22.10.0-32~g63f2adb7c_amd64.deb
+-rw-r--r-- 1 root root  4562332 Feb 23 20:04 vpp-plugin-core_22.10.0-32~g63f2adb7c_amd64.deb
+-rw-r--r-- 1 root root   330724 Feb 23 20:04 vpp-plugin-devtools_22.10.0-32~g63f2adb7c_amd64.deb
+-rw-r--r-- 1 root root  4095008 Feb 23 20:04 vpp-plugin-dpdk_22.10.0-32~g63f2adb7c_amd64.deb
+```
+
+<a id="build_vpp_debug"></a>
+
+#### Build binaries for debugging
+
 If you want to build in debug mode, make as follows.
 ```
 ...
 # make build
 # cp -r build-root/install-vpp_debug-native/vpp /usr/local/
 ```
-Then update the search path information for the shared libraries added for VPP.
+If you want to install the built files as packages without manually copying these, create binary packages as follows.
 ```
-# echo "/usr/local/vpp/lib/x86_64-linux-gnu" >> /etc/ld.so.conf.d/vpp.conf
-# ldconfig
+# make pkg-deb-debug
 ```
 
 <a id="build_upg_vpp"></a>
@@ -665,6 +691,15 @@ Then update the search path information for the shared libraries added for VPP.
 # cp upf_plugin.so /usr/local/vpp/lib/x86_64-linux-gnu/vpp_plugins
 ```
 Now the UPG-VPP was built in `/usr/local/vpp`.
+
+If you want to install the built `upf_plugin.so` etc as packages without manually copying these, create binary packages as follows:
+```
+# make package
+...
+# ls -l *.deb
+-rw-r--r-- 1 root root 1830264 Feb 23 23:37 upf-plugin_1.12.0_amd64.deb
+-rw-r--r-- 1 root root   38748 Feb 23 23:37 upf-plugin-dev_1.12.0_amd64.deb
+```
 
 **Note.
 UPG-VPP v1.12.0 does not support `PDU Session container`.
