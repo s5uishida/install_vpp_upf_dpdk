@@ -652,15 +652,15 @@ If you want to install the built files as packages without manually copying thes
 ...
 # cd build-root
 # ls -l *.deb
--rw-r--r-- 1 root root   190112 Feb 23 20:04 build-root/libvppinfra_22.10.0-32~g63f2adb7c_amd64.deb
--rw-r--r-- 1 root root   140728 Feb 23 20:04 libvppinfra-dev_22.10.0-32~g63f2adb7c_amd64.deb
--rw-r--r-- 1 root root    26216 Feb 23 20:04 python3-vpp-api_22.10.0-32~g63f2adb7c_amd64.deb
--rw-r--r-- 1 root root  5415424 Feb 23 20:04 vpp_22.10.0-32~g63f2adb7c_amd64.deb
--rw-r--r-- 1 root root 78370464 Feb 23 20:04 vpp-dbg_22.10.0-32~g63f2adb7c_amd64.deb
--rw-r--r-- 1 root root  1334060 Feb 23 20:04 vpp-dev_22.10.0-32~g63f2adb7c_amd64.deb
--rw-r--r-- 1 root root  4562332 Feb 23 20:04 vpp-plugin-core_22.10.0-32~g63f2adb7c_amd64.deb
--rw-r--r-- 1 root root   330724 Feb 23 20:04 vpp-plugin-devtools_22.10.0-32~g63f2adb7c_amd64.deb
--rw-r--r-- 1 root root  4095008 Feb 23 20:04 vpp-plugin-dpdk_22.10.0-32~g63f2adb7c_amd64.deb
+-rw-r--r-- 1 root root   190024 Feb 24 20:22 libvppinfra_22.10.0-32~g5ecefa795_amd64.deb
+-rw-r--r-- 1 root root   140760 Feb 24 20:22 libvppinfra-dev_22.10.0-32~g5ecefa795_amd64.deb
+-rw-r--r-- 1 root root    26212 Feb 24 20:22 python3-vpp-api_22.10.0-32~g5ecefa795_amd64.deb
+-rw-r--r-- 1 root root  5415480 Feb 24 20:22 vpp_22.10.0-32~g5ecefa795_amd64.deb
+-rw-r--r-- 1 root root 78403172 Feb 24 20:22 vpp-dbg_22.10.0-32~g5ecefa795_amd64.deb
+-rw-r--r-- 1 root root  1333548 Feb 24 20:23 vpp-dev_22.10.0-32~g5ecefa795_amd64.deb
+-rw-r--r-- 1 root root  4563152 Feb 24 20:22 vpp-plugin-core_22.10.0-32~g5ecefa795_amd64.deb
+-rw-r--r-- 1 root root   330620 Feb 24 20:22 vpp-plugin-devtools_22.10.0-32~g5ecefa795_amd64.deb
+-rw-r--r-- 1 root root  4094912 Feb 24 20:22 vpp-plugin-dpdk_22.10.0-32~g5ecefa795_amd64.deb
 ```
 
 <a id="build_vpp_debug"></a>
@@ -721,8 +721,8 @@ If you want to install the built `upf_plugin.so` etc as packages without manuall
 # make package
 ...
 # ls -l *.deb
--rw-r--r-- 1 root root 1830264 Feb 23 23:37 upf-plugin_1.12.0_amd64.deb
--rw-r--r-- 1 root root   38748 Feb 23 23:37 upf-plugin-dev_1.12.0_amd64.deb
+-rw-r--r-- 1 root root 1830258 Feb 24 20:27 upf-plugin_1.12.0_amd64.deb
+-rw-r--r-- 1 root root   38744 Feb 24 20:27 upf-plugin-dev_1.12.0_amd64.deb
 ```
 
 <a id="install_upg_vpp_pkg"></a>
@@ -842,18 +842,18 @@ vpp#
 # systemctl status vpp
 ● vpp.service - vector packet processing engine
      Loaded: loaded (/lib/systemd/system/vpp.service; enabled; vendor preset: enabled)
-     Active: active (running) since Sat 2024-02-24 13:41:30 JST; 4s ago
-    Process: 3364 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
-   Main PID: 3370 (vpp)
+     Active: active (running) since Sat 2024-02-24 20:59:47 JST; 4s ago
+    Process: 1385 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
+   Main PID: 1386 (vpp)
       Tasks: 2 (limit: 9423)
      Memory: 1.3G
      CGroup: /system.slice/vpp.service
-             └─3370 /usr/bin/vpp -c /etc/vpp/startup.conf
+             └─1386 /usr/bin/vpp -c /etc/vpp/startup.conf
 
-Feb 24 13:41:30 upg-vpp-01-pkg-debug systemd[1]: Starting vector packet processing engine...
-Feb 24 13:41:30 upg-vpp-01-pkg-debug systemd[1]: Started vector packet processing engine.
-Feb 24 13:41:31 upg-vpp-01-pkg-debug vpp[3370]: /usr/bin/vpp: Relink `/lib/x86_64-linux-gnu/libhs_runtime.so.5' with `/lib/x86_64-linux-gnu/libhs.so.5' for IFUNC symbol `dbIsValid'
-Feb 24 13:41:31 upg-vpp-01-pkg-debug vpp[3370]: perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
+Feb 24 20:59:47 upg-vpp-01 systemd[1]: Starting vector packet processing engine...
+Feb 24 20:59:47 upg-vpp-01 systemd[1]: Started vector packet processing engine.
+Feb 24 20:59:47 upg-vpp-01 vpp[1386]: /usr/bin/vpp: Relink `/lib/x86_64-linux-gnu/libhs_runtime.so.5' with `/lib/x86_64-linux-gnu/libhs.so.5' for IFUNC symbol `dbIsValid'
+Feb 24 20:59:47 upg-vpp-01 vpp[1386]: perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
 ```
 
 <a id="changelog"></a>
