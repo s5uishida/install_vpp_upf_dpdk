@@ -673,6 +673,16 @@ If you want to install the built files as packages without manually copying thes
 ```
 # make pkg-deb-debug
 ```
+When installing the built binary packages, first install the following dependent packages.
+```
+# apt install libnl-route-3-200 libhyperscan-dev
+```
+Then install the built packages.
+```
+# cd build-root
+# dpkg -i *.deb
+```
+This allows you to operate VPP service using `systemctl`.
 
 <a id="build_upg_vpp"></a>
 
@@ -699,6 +709,10 @@ If you want to install the built `upf_plugin.so` etc as packages without manuall
 # ls -l *.deb
 -rw-r--r-- 1 root root 1830264 Feb 23 23:37 upf-plugin_1.12.0_amd64.deb
 -rw-r--r-- 1 root root   38748 Feb 23 23:37 upf-plugin-dev_1.12.0_amd64.deb
+```
+To install the built packages, do the following.
+```
+# dpkg -i *.deb
 ```
 
 **Note.
