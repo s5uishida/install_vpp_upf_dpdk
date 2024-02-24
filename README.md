@@ -36,13 +36,14 @@ This briefly describes the steps and configuration to build and install [oai-cn5
   - [For 4G](#4g_conf)
 - [Annex 1. Build and Configure UPG-VPP v1.12.0 on VM-UP](#annex_1)
   - [Confirmed Version List](#ver_list)
-  - [Install required packages](#install_packages)
+  - [Install required packages](#install_pkg)
   - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.12](#build_vpp)
     - [Build binaries for debugging](#build_vpp_debug)
-    - [Install the built VPP packages](#install_vpp_packages)
+    - [Install the built VPP packages](#install_vpp_pkg)
   - [Build UPG-VPP v1.12.0](#build_upg_vpp)
-    - [Install the built UPG-VPP packages](#install_upg_vpp_packages)
+    - [Install the built UPG-VPP packages](#install_upg_vpp_pkg)
   - [Changes in configuration files of UPG-VPP](#changes_up)
+    - [Changes when installing the built packages](#changes_up_pkg)
   - [Run UPG-VPP with DPDK](#run_upg_vpp)
 - [Changelog (summary)](#changelog)
 
@@ -609,7 +610,7 @@ I simply confirmed the operation of the following versions.
 | `tag:v1.11.0` | `tag:v22.10.11` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | OK |
 | `tag:v1.10.0` | `tag:v22.10.10` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | NG |
 
-<a id="install_packages"></a>
+<a id="install_pkg"></a>
 
 ### Install required packages
 
@@ -676,7 +677,7 @@ If you want to install the built files as packages without manually copying thes
 # make pkg-deb-debug
 ```
 
-<a id="install_vpp_packages"></a>
+<a id="install_vpp_pkg"></a>
 
 #### Install the built VPP packages
 
@@ -723,7 +724,7 @@ If you want to install the built `upf_plugin.so` etc as packages without manuall
 -rw-r--r-- 1 root root   38748 Feb 23 23:37 upf-plugin-dev_1.12.0_amd64.deb
 ```
 
-<a id="install_upg_vpp_packages"></a>
+<a id="install_upg_vpp_pkg"></a>
 
 #### Install the built UPG-VPP packages
 
@@ -763,6 +764,49 @@ Then see [here](#conf) for the original files.
 ```
 
 - `openair-upf/init.conf`  
+There is no change.
+
+<a id="changes_up_pkg"></a>
+
+#### Changes when installing the built packages
+
+The configuration files used when operating VPP service with `systemctl` are located in the following directory by default.
+Then see [here](#conf) for the original files.
+
+- `/etc/vpp/startup.conf`  
+
+```diff
+--- startup.conf.orig   2023-07-09 11:59:18.000000000 +0900
++++ startup.conf        2024-02-24 12:22:32.506567556 +0900
+@@ -1,3 +1,5 @@
++heapsize 2G
++
+ unix {
+   nodaemon
+   log /tmp/vpp.log
+@@ -5,7 +7,7 @@
+   gid vpp
+   interactive
+   cli-listen /run/vpp/cli.sock
+-  exec /root/openair-upf/init.conf
++  exec /etc/vpp/init.conf
+ }
+ 
+ api-trace {
+@@ -28,8 +30,8 @@
+ }
+ 
+ plugins {
+-  path /usr/lib/x86_64-linux-gnu/vpp_plugins/
+-  plugin ikev2_plugin.so {disable}
++  path /usr/lib/x86_64-linux-gnu/vpp_plugins/:/usr/local/lib/vpp_plugins/
++  plugin oddbuf_plugin.so {enable}
+   plugin dpdk_plugin.so {enable}
+   plugin upf_plugin.so {enable}
+ }
+```
+
+- `/etc/vpp/init.conf`  
 There is no change.
 
 <a id="run_upg_vpp"></a>
