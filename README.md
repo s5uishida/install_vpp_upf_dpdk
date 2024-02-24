@@ -646,7 +646,7 @@ Then update the search path information for the shared libraries added for VPP.
 # echo "/usr/local/vpp/lib/x86_64-linux-gnu" >> /etc/ld.so.conf.d/vpp.conf
 # ldconfig
 ```
-If you want to install the built files as packages without manually copying these, create binary packages as follows.
+If you want to install the built files as packages without manually copying these, build binary packages as follows.
 ```
 # make pkg-deb
 ...
