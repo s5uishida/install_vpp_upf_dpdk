@@ -669,7 +669,7 @@ If you want to build in debug mode, make as follows.
 # make build
 # cp -r build-root/install-vpp_debug-native/vpp /usr/local/
 ```
-If you want to install the built files as packages without manually copying these, create binary packages as follows.
+If you want to install the built files as packages without manually copying these, build binary packages as follows.
 ```
 # make pkg-deb-debug
 ```
@@ -702,7 +702,7 @@ This allows you to operate VPP service using `systemctl`.
 ```
 Now the UPG-VPP was built in `/usr/local/vpp`.
 
-If you want to install the built `upf_plugin.so` etc as packages without manually copying these, create binary packages as follows:
+If you want to install the built `upf_plugin.so` etc as packages without manually copying these, build binary packages as follows.
 ```
 # make package
 ...
