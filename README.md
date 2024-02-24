@@ -684,7 +684,7 @@ If you want to install the built files as packages without manually copying thes
 
 If you want to install the VPP packages on a host other than the one on which these were built, first install the following dependent packages.
 ```
-# apt install libnl-route-3-200 libhyperscan-dev
+# apt install libnl-route-3-200
 ```
 Then install the VPP packages.
 ```
@@ -729,8 +729,13 @@ If you want to install the built `upf_plugin.so` etc as packages without manuall
 
 #### Install the built UPG-VPP packages
 
-If you want to install the UPG-VPP packages, do the following.
+If you want to install the UPG-VPP packages on a host other than the one on which these were built, first install the following dependent packages.
 ```
+# apt install libhyperscan-dev
+```
+Then install the UPG-VPP packages.
+```
+# cd build
 # dpkg -i *.deb
 ```
 
