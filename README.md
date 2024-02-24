@@ -860,11 +860,12 @@ Feb 24 13:41:31 upg-vpp-01-pkg-debug vpp[3370]: perfmon              [warn  ]: s
 
 ## Changelog (summary)
 
+- [2024.02.24] Added a procedure to build and install the packages.
 - [2024.02.11] Updated to `v1.12.0` tag. Added the information that may be useful when gNodeB does not accept GTP traffic from UPG-VPP.
 - [2023.12.12] There is no change from `v1.11.0-rc.2`, and it has been tagged as `v1.11.0`.
 - [2023.12.03] Updated to `v1.11.0-rc.2` tag.
 - [2023.12.02] Added case of using kernel built-in **vfio-pci** module.
-- [2023.11.08] Added build instructions for UPG-VPP v1.10.0 on Host.
+- [2023.11.08] Added a building procedure for UPG-VPP v1.10.0 on Host.
 - [2023.09.13] Added sample configurations.
 - [2023.07.09] Changed to build all VPP plugins.
 - [2023.07.05] When installing on host, changed to use the `stable/1.2` branch of `travelping/upg-vpp` described in `oai-cn5g-upf-vpp/docker/Dockerfile.*`.
