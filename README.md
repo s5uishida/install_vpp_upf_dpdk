@@ -251,9 +251,9 @@ pci@0000:00:10.0  enp0s16     network     82540EM Gigabit Ethernet Controller
 #### Bind enp0s9/enp0s10/enp0s16 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)
 
 ```
-# dpdk-devbind.py -b uio_pci_generic  0000:00:09.0  --force
-# dpdk-devbind.py -b uio_pci_generic  0000:00:0a.0  --force
-# dpdk-devbind.py -b uio_pci_generic  0000:00:10.0  --force
+# dpdk-devbind.py -b uio_pci_generic 0000:00:09.0 --force
+# dpdk-devbind.py -b uio_pci_generic 0000:00:0a.0 --force
+# dpdk-devbind.py -b uio_pci_generic 0000:00:10.0 --force
 ```
 
 <a id="verify_binding"></a>
