@@ -39,9 +39,9 @@ This briefly describes the steps and configuration to build and install [oai-cn5
   - [Install required packages](#install_packages)
   - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.12](#build_vpp)
     - [Build binaries for debugging](#build_vpp_debug)
-    - [Install the built packages](#install_vpp_packages)
+    - [Install the built VPP packages](#install_vpp_packages)
   - [Build UPG-VPP v1.12.0](#build_upg_vpp)
-    - [Install the built packages](#install_upg_vpp_packages)
+    - [Install the built UPG-VPP packages](#install_upg_vpp_packages)
   - [Changes in configuration files of UPG-VPP](#changes_up)
   - [Run UPG-VPP with DPDK](#run_upg_vpp)
 - [Changelog (summary)](#changelog)
@@ -678,13 +678,13 @@ If you want to install the built files as packages without manually copying thes
 
 <a id="install_vpp_packages"></a>
 
-#### Install the built packages
+#### Install the built VPP packages
 
-If you want to install the built binary packages, first install the following dependent packages.
+If you want to install the built VPP packages, first install the following dependent packages.
 ```
 # apt install libnl-route-3-200 libhyperscan-dev
 ```
-Then install the built packages.
+Then install the VPP packages.
 ```
 # cd build-root
 # dpkg -i *.deb
@@ -725,9 +725,9 @@ If you want to install the built `upf_plugin.so` etc as packages without manuall
 
 <a id="install_upg_vpp_packages"></a>
 
-#### Install the built packages
+#### Install the built UPG-VPP packages
 
-If you want to install the built binary packages, do the following.
+If you want to install the UPG-VPP packages, do the following.
 ```
 # dpkg -i *.deb
 ```
