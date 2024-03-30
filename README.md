@@ -34,13 +34,13 @@ This briefly describes the steps and configuration to build and install [oai-cn5
 - [Sample Configurations](#sample_conf)
   - [For 5G](#5g_conf)
   - [For 4G](#4g_conf)
-- [Annex 1. Build and Configure UPG-VPP v1.12.0 on VM-UP](#annex_1)
+- [Annex 1. Build and Configure UPG-VPP v1.13.0 on VM-UP](#annex_1)
   - [Confirmed Version List](#ver_list)
   - [Install required packages](#install_pkg)
-  - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.12](#build_vpp)
+  - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.13](#build_vpp)
     - [Build binaries for debugging](#build_vpp_debug)
     - [Install the built VPP packages](#install_vpp_pkg)
-  - [Build UPG-VPP v1.12.0](#build_upg_vpp)
+  - [Build UPG-VPP v1.13.0](#build_upg_vpp)
     - [Install the built UPG-VPP packages](#install_upg_vpp_pkg)
   - [Changes in configuration files of UPG-VPP](#changes_up)
     - [Changes when installing the built packages](#changes_up_pkg)
@@ -587,7 +587,7 @@ I would like to thank the excellent developers and all the contributors of OpenA
 
 <a id="annex_1"></a>
 
-## Annex 1. Build and Configure UPG-VPP v1.12.0 on VM-UP
+## Annex 1. Build and Configure UPG-VPP v1.13.0 on VM-UP
 
 For a simple overview of VPP-UPF at the beginning of this article, read **OAI-CN5G-UPF-VPP** as **UPG-VPP**.
 Also, the Ubuntu version has changed from 22.04 to 20.04.
@@ -607,6 +607,7 @@ I simply confirmed the operation of the following versions.
 
 | UPG-VPP | FPP-VPP | VPP | iPerf3 |
 | --- | --- | --- | -- |
+| `tag:v1.13.0` | `tag:v22.10.13` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | OK |
 | `tag:v1.12.0` | `tag:v22.10.12` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | OK |
 | `tag:v1.11.0` | `tag:v22.10.11` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | OK |
 | `tag:v1.10.0` | `tag:v22.10.10` | `branch:stable/2210`<br>`commit:07e0c05e698cf5ffd1e2d2de0296d1907519dc3d` | NG |
@@ -621,13 +622,13 @@ I simply confirmed the operation of the following versions.
 
 <a id="build_vpp"></a>
 
-### Build VPP v22.10 applied with patches of FPP-VPP v22.10.12
+### Build VPP v22.10 applied with patches of FPP-VPP v22.10.13
 
 ```
 # cd ~
 # git clone https://github.com/travelping/fpp-vpp.git
 # cd fpp-vpp
-# git checkout refs/tags/v22.10.12
+# git checkout refs/tags/v22.10.13
 ```
 ```
 # cd ~
@@ -652,15 +653,15 @@ If you want to install the built files as packages without manually copying thes
 ...
 # cd build-root
 # ls -l *.deb
--rw-r--r-- 1 root root   190024 Feb 24 20:22 libvppinfra_22.10.0-32~g5ecefa795_amd64.deb
--rw-r--r-- 1 root root   140760 Feb 24 20:22 libvppinfra-dev_22.10.0-32~g5ecefa795_amd64.deb
--rw-r--r-- 1 root root    26212 Feb 24 20:22 python3-vpp-api_22.10.0-32~g5ecefa795_amd64.deb
--rw-r--r-- 1 root root  5415480 Feb 24 20:22 vpp_22.10.0-32~g5ecefa795_amd64.deb
--rw-r--r-- 1 root root 78403172 Feb 24 20:22 vpp-dbg_22.10.0-32~g5ecefa795_amd64.deb
--rw-r--r-- 1 root root  1333548 Feb 24 20:23 vpp-dev_22.10.0-32~g5ecefa795_amd64.deb
--rw-r--r-- 1 root root  4563152 Feb 24 20:22 vpp-plugin-core_22.10.0-32~g5ecefa795_amd64.deb
--rw-r--r-- 1 root root   330620 Feb 24 20:22 vpp-plugin-devtools_22.10.0-32~g5ecefa795_amd64.deb
--rw-r--r-- 1 root root  4094912 Feb 24 20:22 vpp-plugin-dpdk_22.10.0-32~g5ecefa795_amd64.deb
+-rw-r--r-- 1 root root   190160 Mar 30 07:30 libvppinfra_22.10.0-33~ga470e8dbb_amd64.deb
+-rw-r--r-- 1 root root   140788 Mar 30 07:30 libvppinfra-dev_22.10.0-33~ga470e8dbb_amd64.deb
+-rw-r--r-- 1 root root    26228 Mar 30 07:30 python3-vpp-api_22.10.0-33~ga470e8dbb_amd64.deb
+-rw-r--r-- 1 root root  5414444 Mar 30 07:30 vpp_22.10.0-33~ga470e8dbb_amd64.deb
+-rw-r--r-- 1 root root 78405464 Mar 30 07:30 vpp-dbg_22.10.0-33~ga470e8dbb_amd64.deb
+-rw-r--r-- 1 root root  1334056 Mar 30 07:31 vpp-dev_22.10.0-33~ga470e8dbb_amd64.deb
+-rw-r--r-- 1 root root  4561496 Mar 30 07:30 vpp-plugin-core_22.10.0-33~ga470e8dbb_amd64.deb
+-rw-r--r-- 1 root root   330768 Mar 30 07:30 vpp-plugin-devtools_22.10.0-33~ga470e8dbb_amd64.deb
+-rw-r--r-- 1 root root  4095716 Mar 30 07:30 vpp-plugin-dpdk_22.10.0-33~ga470e8dbb_amd64.deb
 ```
 
 <a id="build_vpp_debug"></a>
@@ -695,13 +696,13 @@ This allows you to operate VPP service using `systemctl`.
 
 <a id="build_upg_vpp"></a>
 
-### Build UPG-VPP v1.12.0
+### Build UPG-VPP v1.13.0
 
 ```
 # cd ~
 # git clone https://github.com/travelping/upg-vpp.git
 # cd upg-vpp
-# git checkout refs/tags/v1.12.0
+# git checkout refs/tags/v1.13.0
 # make version
 # mkdir build
 # cd build
@@ -712,7 +713,7 @@ This allows you to operate VPP service using `systemctl`.
 Now the UPG-VPP was built in `/usr/local/vpp`.
 
 **Note.
-UPG-VPP v1.12.0 does not support `PDU Session container`.
+UPG-VPP v1.13.0 does not support `PDU Session container`.
 Therefore, some gNodeBs may not accept GTP traffic from UPG-VPP that does not contain `DL PDU SESSION INFORMATION` in the `PDU Session container`.
 In that case, there is a way to try the OAI patch by referring to [here](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1935837642).**
 
@@ -721,8 +722,8 @@ If you want to install the built `upf_plugin.so` etc as packages without manuall
 # make package
 ...
 # ls -l *.deb
--rw-r--r-- 1 root root 1830258 Feb 24 20:27 upf-plugin_1.12.0_amd64.deb
--rw-r--r-- 1 root root   38744 Feb 24 20:27 upf-plugin-dev_1.12.0_amd64.deb
+-rw-r--r-- 1 root root 1818462 Mar 30 07:42 upf-plugin_1.13.0_amd64.deb
+-rw-r--r-- 1 root root   38740 Mar 30 07:42 upf-plugin-dev_1.13.0_amd64.deb
 ```
 
 <a id="install_upg_vpp_pkg"></a>
@@ -847,24 +848,25 @@ vpp#
 # systemctl status vpp
 ● vpp.service - vector packet processing engine
      Loaded: loaded (/lib/systemd/system/vpp.service; enabled; vendor preset: enabled)
-     Active: active (running) since Sat 2024-02-24 20:59:47 JST; 4s ago
-    Process: 1385 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
-   Main PID: 1386 (vpp)
+     Active: active (running) since Sat 2024-03-30 08:59:18 JST; 1s ago
+    Process: 2546 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
+   Main PID: 2547 (vpp)
       Tasks: 2 (limit: 9423)
      Memory: 1.3G
      CGroup: /system.slice/vpp.service
-             └─1386 /usr/bin/vpp -c /etc/vpp/startup.conf
+             └─2547 /usr/bin/vpp -c /etc/vpp/startup.conf
 
-Feb 24 20:59:47 upg-vpp-01 systemd[1]: Starting vector packet processing engine...
-Feb 24 20:59:47 upg-vpp-01 systemd[1]: Started vector packet processing engine.
-Feb 24 20:59:47 upg-vpp-01 vpp[1386]: /usr/bin/vpp: Relink `/lib/x86_64-linux-gnu/libhs_runtime.so.5' with `/lib/x86_64-linux-gnu/libhs.so.5' for IFUNC symbol `dbIsValid'
-Feb 24 20:59:47 upg-vpp-01 vpp[1386]: perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
+Mar 30 08:59:18 upg-vpp-01 systemd[1]: Starting vector packet processing engine...
+Mar 30 08:59:18 upg-vpp-01 systemd[1]: Started vector packet processing engine.
+Mar 30 08:59:18 upg-vpp-01 vpp[2547]: /usr/bin/vpp: Relink `/lib/x86_64-linux-gnu/libhs_runtime.so.5' with `/lib/x86_64-linux-gnu/libhs.so.5' for IFUNC symbol `dbIsValid'
+Mar 30 08:59:18 upg-vpp-01 vpp[2547]: perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
 ```
 
 <a id="changelog"></a>
 
 ## Changelog (summary)
 
+- [2024.03.30] Updated to `v1.13.0` tag.
 - [2024.02.24] Added a procedure to build and install the packages.
 - [2024.02.11] Updated to `v1.12.0` tag. Added the information that may be useful when gNodeB does not accept GTP traffic from UPG-VPP.
 - [2023.12.12] There is no change from `v1.11.0-rc.2`, and it has been tagged as `v1.11.0`.
