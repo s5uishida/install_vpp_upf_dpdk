@@ -590,13 +590,12 @@ I would like to thank the excellent developers and all the contributors of OpenA
 ## Annex 1. Build and Configure UPG-VPP v1.13.0 on VM-UP
 
 For a simple overview of VPP-UPF at the beginning of this article, read **OAI-CN5G-UPF-VPP** as **UPG-VPP**.
-Also, the Ubuntu version has changed from 22.04 to 20.04.
 
 VM-UP is as follows.
 
 | VM | SW & Role | IP address | OS | CPU<br>(Min) | Memory<br>(Min) | HDD<br>(Min) |
 | --- | --- | --- | --- | --- | --- | --- |
-| VM-UP | UPG-VPP U-Plane | 192.168.0.151/24 | Ubuntu **20.04** | 2 | 8GB | 20GB |
+| VM-UP | UPG-VPP U-Plane | 192.168.0.151/24 | Ubuntu 22.04 | 2 | 8GB | 20GB |
 
 <a id="ver_list"></a>
 
@@ -653,15 +652,15 @@ If you want to install the built files as packages without manually copying thes
 ...
 # cd build-root
 # ls -l *.deb
--rw-r--r-- 1 root root   190160 Mar 30 07:30 libvppinfra_22.10.0-33~ga470e8dbb_amd64.deb
--rw-r--r-- 1 root root   140788 Mar 30 07:30 libvppinfra-dev_22.10.0-33~ga470e8dbb_amd64.deb
--rw-r--r-- 1 root root    26228 Mar 30 07:30 python3-vpp-api_22.10.0-33~ga470e8dbb_amd64.deb
--rw-r--r-- 1 root root  5414444 Mar 30 07:30 vpp_22.10.0-33~ga470e8dbb_amd64.deb
--rw-r--r-- 1 root root 78405464 Mar 30 07:30 vpp-dbg_22.10.0-33~ga470e8dbb_amd64.deb
--rw-r--r-- 1 root root  1334056 Mar 30 07:31 vpp-dev_22.10.0-33~ga470e8dbb_amd64.deb
--rw-r--r-- 1 root root  4561496 Mar 30 07:30 vpp-plugin-core_22.10.0-33~ga470e8dbb_amd64.deb
--rw-r--r-- 1 root root   330768 Mar 30 07:30 vpp-plugin-devtools_22.10.0-33~ga470e8dbb_amd64.deb
--rw-r--r-- 1 root root  4095716 Mar 30 07:30 vpp-plugin-dpdk_22.10.0-33~ga470e8dbb_amd64.deb
+-rw-r--r-- 1 root root   194014 May  4 23:52 libvppinfra_22.10.0-33~g13e629901_amd64.deb
+-rw-r--r-- 1 root root   144410 May  4 23:52 libvppinfra-dev_22.10.0-33~g13e629901_amd64.deb
+-rw-r--r-- 1 root root    26466 May  4 23:52 python3-vpp-api_22.10.0-33~g13e629901_amd64.deb
+-rw-r--r-- 1 root root  5575156 May  4 23:52 vpp_22.10.0-33~g13e629901_amd64.deb
+-rw-r--r-- 1 root root 82589604 May  4 23:52 vpp-dbg_22.10.0-33~g13e629901_amd64.deb
+-rw-r--r-- 1 root root  1294366 May  4 23:52 vpp-dev_22.10.0-33~g13e629901_amd64.deb
+-rw-r--r-- 1 root root  4736556 May  4 23:52 vpp-plugin-core_22.10.0-33~g13e629901_amd64.deb
+-rw-r--r-- 1 root root   363268 May  4 23:52 vpp-plugin-devtools_22.10.0-33~g13e629901_amd64.deb
+-rw-r--r-- 1 root root  4465408 May  4 23:52 vpp-plugin-dpdk_22.10.0-33~g13e629901_amd64.deb
 ```
 
 <a id="build_vpp_debug"></a>
@@ -722,8 +721,8 @@ If you want to install the built `upf_plugin.so` etc as packages without manuall
 # make package
 ...
 # ls -l *.deb
--rw-r--r-- 1 root root 1818462 Mar 30 07:42 upf-plugin_1.13.0_amd64.deb
--rw-r--r-- 1 root root   38740 Mar 30 07:42 upf-plugin-dev_1.13.0_amd64.deb
+-rw-r--r-- 1 root root 2866388 May  4 23:57 upf-plugin_1.13.0_amd64.deb
+-rw-r--r-- 1 root root   38746 May  4 23:57 upf-plugin-dev_1.13.0_amd64.deb
 ```
 
 <a id="install_upg_vpp_pkg"></a>
@@ -829,7 +828,6 @@ First, create group `vpp` if it doesn't exist.
 Then run UPG-VPP with DPDK.
 ```
 # /usr/local/vpp/bin/vpp -c /root/openair-upf/startup.conf
-/usr/local/vpp/bin/vpp: Relink `/lib/x86_64-linux-gnu/libhs_runtime.so.5' with `/lib/x86_64-linux-gnu/libhs.so.5' for IFUNC symbol `dbIsValid'
 perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
     _______    _        _   _____  ___ 
  __/ __/ _ \  (_)__    | | / / _ \/ _ \
@@ -848,24 +846,25 @@ vpp#
 # systemctl status vpp
 ● vpp.service - vector packet processing engine
      Loaded: loaded (/lib/systemd/system/vpp.service; enabled; vendor preset: enabled)
-     Active: active (running) since Sat 2024-03-30 08:59:18 JST; 1s ago
-    Process: 2546 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
-   Main PID: 2547 (vpp)
-      Tasks: 2 (limit: 9423)
+     Active: active (running) since Sun 2024-05-05 00:54:16 JST; 1s ago
+    Process: 2547 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
+   Main PID: 2548 (vpp)
+      Tasks: 2 (limit: 9387)
      Memory: 1.3G
+        CPU: 1.023s
      CGroup: /system.slice/vpp.service
-             └─2547 /usr/bin/vpp -c /etc/vpp/startup.conf
+             └─2548 /usr/bin/vpp -c /etc/vpp/startup.conf
 
-Mar 30 08:59:18 upg-vpp-01 systemd[1]: Starting vector packet processing engine...
-Mar 30 08:59:18 upg-vpp-01 systemd[1]: Started vector packet processing engine.
-Mar 30 08:59:18 upg-vpp-01 vpp[2547]: /usr/bin/vpp: Relink `/lib/x86_64-linux-gnu/libhs_runtime.so.5' with `/lib/x86_64-linux-gnu/libhs.so.5' for IFUNC symbol `dbIsValid'
-Mar 30 08:59:18 upg-vpp-01 vpp[2547]: perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
+May 05 00:54:16 upg-vpp-11 systemd[1]: Starting vector packet processing engine...
+May 05 00:54:16 upg-vpp-11 systemd[1]: Started vector packet processing engine.
+May 05 00:54:16 upg-vpp-11 vpp[2548]: perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
 ```
 
 <a id="changelog"></a>
 
 ## Changelog (summary)
 
+- [2024.05.04] Changed the UPG-VPP OS from Ubuntu 20.04 to 22.04.
 - [2024.03.30] Updated to `v1.13.0` tag.
 - [2024.02.24] Added a procedure to build and install the packages.
 - [2024.02.11] Updated to `v1.12.0` tag. Added the information that may be useful when gNodeB does not accept GTP traffic from UPG-VPP.
