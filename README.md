@@ -714,7 +714,9 @@ Now the UPG-VPP was built in `/usr/local/vpp`.
 **Note.
 UPG-VPP v1.13.0 does not support `PDU Session container`.
 Therefore, some gNodeBs may not accept GTP traffic from UPG-VPP that does not contain `DL PDU SESSION INFORMATION` in the `PDU Session container`.
-In that case, there is a way to try the OAI patch by referring to [here](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1935837642).**
+In that case, there is a way to try the OAI patch by referring to [here](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1935837642).
+Also, [this](./patches/gtp_ext_hdr_qfi_1.patch) is a temporary patch for UPG-VPP v1.13.0 based on the OAI patch. QFI is fixed to 1.
+I confirmed that it works with the gNodeB of srsRAN_Project.**
 
 If you want to install the built `upf_plugin.so` etc as packages without manually copying these, build binary packages as follows.
 ```
@@ -864,6 +866,7 @@ May 05 00:54:16 upg-vpp-11 vpp[2548]: perfmon              [warn  ]: skipping so
 
 ## Changelog (summary)
 
+- [2024.06.04] Added confirmation of operation with gNodeB of srsRAN_Project.
 - [2024.05.04] Changed the UPG-VPP OS from Ubuntu 20.04 to 22.04.
 - [2024.03.30] Updated to `v1.13.0` tag.
 - [2024.02.24] Added a procedure to build and install the packages.
