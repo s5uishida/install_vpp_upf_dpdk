@@ -1,0 +1,80 @@
+This patch was created for UPG-VPP v1.13.0 based on the following OAI patch.
+It is a temporary patch with QFI fixed to 1.
+
+https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-upf-vpp/-/commit/d9909c42e7c70029c3d6b39ebf5132d99032c231
+
+diff -urN upg-vpp.orig/upf/upf_gtpu_encap.c upg-vpp/upf/upf_gtpu_encap.c
+--- upg-vpp.orig/upf/upf_gtpu_encap.c	2024-05-04 23:55:50.000000000 +0900
++++ upg-vpp/upf/upf_gtpu_encap.c	2024-06-04 19:35:06.000000000 +0900
+@@ -874,6 +874,8 @@
+           ip6_header_t *ip6_0;
+           udp_header_t *udp0;
+           gtpu_header_t *gtpu0;
++          gtpu_ext_header_t *gtpu0_ext;
++          bool ext_hdr_present;
+           u64 *copy_src0, *copy_dst0;
+           u32 *copy_src_last0, *copy_dst_last0;
+           u16 new_l0;
+@@ -907,6 +909,17 @@
+           next0 = peer0->next_dpo.dpoi_next_node;
+           vnet_buffer (b0)->ip.adj_index[VLIB_TX] = peer0->next_dpo.dpoi_index;
+ 
++          gtpu_ext_header_t *gtpu0_tmp;
++          gtpu0_tmp = vlib_buffer_get_current (b0) - 4;
++          ext_hdr_present = false;
++          if (gtpu0_tmp->type ==  0x01 & gtpu0_tmp->pad == GTPU_QFI)
++            ext_hdr_present = true;
++
++          if (far0->forward.dst_intf == PFCP_DST_INTF_ACCESS & !ext_hdr_present) {
++            upf_buffer_opaque (b0)->gtpu.ext_hdr_len = 0x08;
++            vlib_buffer_advance (b0, -upf_buffer_opaque (b0)->gtpu.ext_hdr_len);      
++          }
++
+           if (PREDICT_FALSE ((upf_buffer_opaque (b0)->gtpu.hdr_flags &
+                               GTPU_E_S_PN_BIT) != 0))
+             vlib_buffer_advance (b0,
+@@ -953,8 +966,19 @@
+                 vlib_buffer_length_in_chain (vm, b0) - sizeof (*ip4_0) -
+                 sizeof (*udp0) - GTPU_V1_HDR_LEN);
+               gtpu0->length = new_l0;
+-              gtpu0->ver_flags |=
+-                (upf_buffer_opaque (b0)->gtpu.hdr_flags & GTPU_E_S_PN_BIT);
++              if (far0->forward.dst_intf == PFCP_DST_INTF_ACCESS & !ext_hdr_present) {
++                gtpu0->ver_flags = GTPU_EXT_HDR_PRESENT;
++                gtpu0->pdu_number = 0x00;
++                gtpu0->sequence = 0x00;
++                gtpu0->next_ext_type = GTPU_EXT_HDR_PDU_SESSION_CONTAINER;
++
++                gtpu0_ext = (gtpu_ext_header_t *) (gtpu0 + 1);
++                gtpu0_ext->type = 0x01;
++                gtpu0_ext->len = 0x00;
++                gtpu0_ext->pad = GTPU_QFI;
++              }
++              else
++                gtpu0->ver_flags |= (upf_buffer_opaque (b0)->gtpu.hdr_flags & GTPU_E_S_PN_BIT);
+             }
+ 
+           else /* ip6 path */
+diff -urN upg-vpp.orig/upf/upf.h upg-vpp/upf/upf.h
+--- upg-vpp.orig/upf/upf.h	2024-05-04 23:55:50.000000000 +0900
++++ upg-vpp/upf/upf.h	2024-06-04 19:35:31.000000000 +0900
+@@ -115,6 +115,7 @@
+ /* clang-format on */
+ 
+ #define GTPU_V1_HDR_LEN 8
++#define GTPU_V1_EXT_HDR_LEN 8
+ 
+ #define GTPU_VER_MASK   (7 << 5)
+ #define GTPU_PT_BIT     (1 << 4)
+@@ -143,6 +144,11 @@
+ #define GTPU_IE_TEID_I      16
+ #define GTPU_IE_GSN_ADDRESS 133
+ 
++#define GTPU_EXT_HDR_PRESENT 52
++#define GTPU_EXT_HDR_PDU_SESSION_CONTAINER 133
++#define GTPU_NO_MORE_EXT_HDR 0
++#define GTPU_QFI 1
++
+ /* clang-format off */
+ typedef CLIB_PACKED(struct
+ {
