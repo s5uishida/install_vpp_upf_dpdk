@@ -24,7 +24,7 @@ This briefly describes the steps and configuration to build and install [oai-cn5
   - [Case of using kernel module "uio_pci_generic"](#uio_pci_generic)
     - [Load kernel module "uio_pci_generic"](#load_module)
     - [Check Interfaces](#check_interfaces)
-    - [Bind enp0s9/enp0s10/enp0s16 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)](#bind_interfaces)
+    - [Bind ens20/ens21/ens22 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)](#bind_interfaces)
     - [Verify DPDK binding](#verify_binding)
   - [Case of using kernel module "vfio-pci"](#vfio_pci)
   - [Create configuration files](#conf)
@@ -55,7 +55,7 @@ This briefly describes the steps and configuration to build and install [oai-cn5
 ## Simple Overview of VPP-UPF and Data Network Gateway
 
 This describes a simple configuration of VPP-UPF and Data Network Gateway, focusing on U-Plane.
-**Note that this configuration is implemented with Virtualbox VMs.**
+**Note that this configuration is implemented with Proxmox VE VMs.**
 
 The following minimum configuration was set as a condition.
 - One UPF and Data Network Gateway
@@ -76,47 +76,25 @@ Each VMs are as follows.
 The network interfaces of each VM are as follows.
 **Note. Do not enable(up) any devices that will be under the control of DPDK.
 These devices will be enabled and set IP addresses in the `init.conf` file of VPP-UPF.**
-| VM | Device | Network Adapter | IP address | Interface | Under DPDK |
-| --- | --- | --- | --- | --- | --- |
-| VM-UP | enp0s3 | NAT(default) | 10.0.2.15/24 | (VM default NW) | -- |
-| | enp0s8 | Bridged Adapter | 192.168.0.151/24 | (Mgmt NW) | -- |
-| | enp0s9 | NAT Network | 192.168.13.151/24 | N3 | x |
-| | enp0s10 | NAT Network | 192.168.14.151/24 | N4 | x |
-| | enp0s16 | NAT Network | 192.168.16.151/24 | N6 | x |
-| VM-DN | enp0s3 | NAT(default) | 10.0.2.15/24 | (VM default NW) | -- |
-| | enp0s8 | Bridged Adapter | 192.168.0.152/24 | (Mgmt NW) | -- |
-| | enp0s9 | NAT Network | 192.168.16.152/24 | N6 | -- |
+| VM | Device | Model | Linux Bridge | IP address | Interface | Under DPDK |
+| --- | --- | --- | --- | --- | --- | --- |
+| VM-UP | ens18 | VirtIO | vmbr1 | 10.0.0.151/24 | (NAPT NW) | -- |
+| | ens19 | VirtIO | mgbr0 | 192.168.0.151/24 | (Mgmt NW) | -- |
+| | ens20 | VirtIO | vmbr3 | 192.168.13.151/24 | N3 | x |
+| | ens21 | VirtIO | vmbr4 | 192.168.14.151/24 | N4 | x |
+| | ens22 | VirtIO | vmbr6 | 192.168.16.151/24 | N6 | x |
+| VM-DN | ens18 | VirtIO | vmbr1 | 10.0.0.152/24 | (NAPT NW) | -- |
+| | ens19 | VirtIO | mgbr0 | 192.168.0.152/24 | (Mgmt NW) | -- |
+| | ens20 | VirtIO | vmbr6 | 192.168.16.152/24 | N6 | -- |
 
-NAT networks of Virtualbox  are as follows.
-| Network Name | Network CIDR |
-| --- | --- |
-| N3 | 192.168.13.0/24 |
-| N4 | 192.168.14.0/24 |
-| N6 | 192.168.16.0/24 |
-
-**Note. Virtualbox GUI tool can only register up to 4 Network Adapters in one VM.
-Since 5 Network Adapters are registered in VM-UP, one cannot be registered with the GUI tool.
-In this case, directly edit the vbox file as follows and register the remaining Network Adapter.**
-
-**For example)**
-```diff
---- upf-vpp-dpdk-10.vbox.orig   2023-06-12 20:53:32.344961102 +0900
-+++ upf-vpp-dpdk-10.vbox        2023-06-13 21:57:19.777484821 +0900
-@@ -68,7 +68,12 @@
-           </DisabledModes>
-           <NATNetwork name="N4"/>
-         </Adapter>
--        <Adapter slot="8" MACAddress="0800272F0298" cable="false"/>
-+        <Adapter slot="8" enabled="true" MACAddress="0800272F0298" type="82540EM">
-+          <DisabledModes>
-+            <InternalNetwork name="intnet"/>
-+          </DisabledModes>
-+          <NATNetwork name="N6"/>
-+        </Adapter>
-         <Adapter slot="9" MACAddress="080027A0C784" cable="false"/>
-         <Adapter slot="10" MACAddress="080027C6438A" cable="false"/>
-         <Adapter slot="11" MACAddress="080027594595" cable="false"/>
-```
+Linux Bridges of Proxmox VE are as follows.
+| Linux Bridge | Network CIDR | Interface |
+| --- | --- | --- |
+| vmbr1 | 10.0.0.0/24 | NAPT NW |
+| mgbr0 | 192.168.0.0/24 | Mgmt NW |
+| vmbr3 | 192.168.13.0/24 | N3 |
+| vmbr4 | 192.168.14.0/24 | N4 |
+| vmbr6 | 192.168.16.0/24 | N6 |
 
 Set network instance to `internet`.
 | Network Instance |
@@ -237,23 +215,28 @@ Please refer to the following for setup VPP-UPF with DPDK.
 
 ```
 # lshw -c network -businfo
-Bus info          Device      Class       Description
-=====================================================
-pci@0000:00:03.0  enp0s3      network     82540EM Gigabit Ethernet Controller
-pci@0000:00:08.0  enp0s8      network     82540EM Gigabit Ethernet Controller
-pci@0000:00:09.0  enp0s9      network     82540EM Gigabit Ethernet Controller
-pci@0000:00:0a.0  enp0s10     network     82540EM Gigabit Ethernet Controller
-pci@0000:00:10.0  enp0s16     network     82540EM Gigabit Ethernet Controller
+Bus info          Device      Class      Description
+====================================================
+pci@0000:00:12.0              network    Virtio network device
+virtio@1          ens18       network    Ethernet interface
+pci@0000:00:13.0              network    Virtio network device
+virtio@2          ens19       network    Ethernet interface
+pci@0000:00:14.0              network    Virtio network device
+virtio@3          ens20       network    Ethernet interface
+pci@0000:00:15.0              network    Virtio network device
+virtio@4          ens21       network    Ethernet interface
+pci@0000:00:16.0              network    Virtio network device
+virtio@5          ens22       network    Ethernet interface
 ```
 
 <a id="bind_interfaces"></a>
 
-#### Bind enp0s9/enp0s10/enp0s16 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)
+#### Bind ens20/ens21/ens22 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)
 
 ```
-# dpdk-devbind.py -b uio_pci_generic 0000:00:09.0 --force
-# dpdk-devbind.py -b uio_pci_generic 0000:00:0a.0 --force
-# dpdk-devbind.py -b uio_pci_generic 0000:00:10.0 --force
+# dpdk-devbind.py -b uio_pci_generic 0000:00:14.0 --force
+# dpdk-devbind.py -b uio_pci_generic 0000:00:15.0 --force
+# dpdk-devbind.py -b uio_pci_generic 0000:00:16.0 --force
 ```
 
 <a id="verify_binding"></a>
@@ -262,27 +245,29 @@ pci@0000:00:10.0  enp0s16     network     82540EM Gigabit Ethernet Controller
 
 ```
 # lshw -c network -businfo
-Bus info          Device      Class       Description
-=====================================================
-pci@0000:00:03.0  enp0s3      network     82540EM Gigabit Ethernet Controller
-pci@0000:00:08.0  enp0s8      network     82540EM Gigabit Ethernet Controller
-pci@0000:00:09.0              network     82540EM Gigabit Ethernet Controller
-pci@0000:00:0a.0              network     82540EM Gigabit Ethernet Controller
-pci@0000:00:10.0              network     82540EM Gigabit Ethernet Controller
+Bus info          Device      Class      Description
+====================================================
+pci@0000:00:12.0              network    Virtio network device
+virtio@1          ens18       network    Ethernet interface
+pci@0000:00:13.0              network    Virtio network device
+virtio@2          ens19       network    Ethernet interface
+pci@0000:00:14.0              network    Virtio network device
+pci@0000:00:15.0              network    Virtio network device
+pci@0000:00:16.0              network    Virtio network device
 ```
 ```
 # dpdk-devbind.py -s
 
 Network devices using DPDK-compatible driver
 ============================================
-0000:00:09.0 '82540EM Gigabit Ethernet Controller 100e' drv=uio_pci_generic unused=e1000,vfio-pci
-0000:00:0a.0 '82540EM Gigabit Ethernet Controller 100e' drv=uio_pci_generic unused=e1000,vfio-pci
-0000:00:10.0 '82540EM Gigabit Ethernet Controller 100e' drv=uio_pci_generic unused=e1000,vfio-pci
+0000:00:14.0 'Virtio network device 1000' drv=uio_pci_generic unused=vfio-pci
+0000:00:15.0 'Virtio network device 1000' drv=uio_pci_generic unused=vfio-pci
+0000:00:16.0 'Virtio network device 1000' drv=uio_pci_generic unused=vfio-pci
 
 Network devices using kernel driver
 ===================================
-0000:00:03.0 '82540EM Gigabit Ethernet Controller 100e' if=enp0s3 drv=e1000 unused=vfio-pci,uio_pci_generic *Active*
-0000:00:08.0 '82540EM Gigabit Ethernet Controller 100e' if=enp0s8 drv=e1000 unused=vfio-pci,uio_pci_generic *Active*
+0000:00:12.0 'Virtio network device 1000' if=ens18 drv=virtio-pci unused=vfio-pci,uio_pci_generic *Active*
+0000:00:13.0 'Virtio network device 1000' if=ens19 drv=virtio-pci unused=vfio-pci,uio_pci_generic *Active*
 
 No 'Baseband' devices detected
 ==============================
@@ -307,13 +292,16 @@ No 'Misc (rawdev)' devices detected
 
 No 'Regex' devices detected
 ===========================
+
+No 'ML' devices detected
+========================
 ```
 
 <a id="vfio_pci"></a>
 
 ### Case of using kernel module "vfio-pci"
 
-When using the kernel built-in **vfio-pci** module, please down the `enp0s9`/`enp0s10`/`enp0s16` interfaces in advance.
+When using the kernel built-in **vfio-pci** module, please down the `ens20`/`ens21`/`ens22` interfaces in advance.
 And, refer to [this](https://doc.dpdk.org/guides/linux_gsg/linux_drivers.html) and set the kernel to IOMMU mode.
 Alternatively, it can be used in No-IOMMU mode.
 Then, these interfaces are under DPDK control by running `vpp` without explicit **vfio-pci** binding.
@@ -351,9 +339,9 @@ api-segment {
 }
 
 dpdk {
-  dev 0000:00:09.0 {name n3}
-  dev 0000:00:0a.0 {name n4}
-  dev 0000:00:10.0 {name n6}
+  dev 0000:00:14.0 {name n3}
+  dev 0000:00:15.0 {name n4}
+  dev 0000:00:16.0 {name n6}
 }
 
 plugins {
@@ -427,7 +415,12 @@ upf specification release 16
 
 ```
 # /usr/bin/vpp -c /root/openair-upf/startup.conf
+clib_sysfs_prealloc_hugepages:260: pre-allocating 20 additional 2048K hugepages on numa node 0
+0: clib_sysfs_prealloc_hugepages:260: pre-allocating 8 additional 2048K hugepages on numa node 0
 dpdk             [warn  ]: not enough DPDK crypto resources
+dpdk             [warn  ]: unsupported rx offloads requested on port 0: scatter 
+dpdk             [warn  ]: unsupported rx offloads requested on port 1: scatter 
+dpdk             [warn  ]: unsupported rx offloads requested on port 2: scatter 
 dpdk/cryptodev   [warn  ]: dpdk_cryptodev_init: Not enough cryptodevs
     _______    _        _   _____  ___ 
  __/ __/ _ \  (_)__    | | / / _ \/ _ \
@@ -449,75 +442,86 @@ local0                             0    down  local0
   local
 0: format_dpdk_device:590: rte_eth_dev_rss_hash_conf_get returned -95
 n3                                 1     up   n3
-  Link speed: 1 Gbps
-  Ethernet address 08:00:27:bd:c2:88
-  Intel 82540EM (e1000)
-    carrier up full duplex mtu 9000 
-    flags: admin-up pmd maybe-multiseg tx-offload intel-phdr-cksum rx-ip4-cksum
+  Link speed: 4294 Gbps
+  Ethernet address bc:24:11:d8:09:23
+  Red Hat Virtio
+    carrier up half duplex mtu 9000 
+    flags: admin-up pmd maybe-multiseg
     Devargs: 
-    rx: queues 1 (max 1), desc 1024 (min 32 max 4096 align 8)
-    tx: queues 1 (max 1), desc 1024 (min 32 max 4096 align 8)
-    pci: device 8086:100e subsystem 8086:001e address 0000:00:09.00 numa 0
-    max rx packet len: 16128
+    rx: queues 1 (max 1), desc 256 (min 0 max 65535 align 1)
+    tx: queues 1 (max 1), desc 256 (min 0 max 65535 align 1)
+    pci: device 1af4:1000 subsystem 1af4:0001 address 0000:00:14.00 numa 0
+    max rx packet len: 9728
     promiscuous: unicast off all-multicast on
     vlan offload: strip off filter off qinq off
-    rx offload avail:  vlan-strip ipv4-cksum udp-cksum tcp-cksum vlan-filter 
-                       jumbo-frame scatter keep-crc 
-    rx offload active: ipv4-cksum jumbo-frame scatter 
-    tx offload avail:  vlan-insert ipv4-cksum udp-cksum tcp-cksum multi-segs 
-    tx offload active: udp-cksum tcp-cksum multi-segs 
+    rx offload avail:  vlan-strip udp-cksum tcp-cksum tcp-lro vlan-filter 
+                       jumbo-frame 
+    rx offload active: jumbo-frame 
+    tx offload avail:  vlan-insert udp-cksum tcp-cksum tcp-tso multi-segs 
+    tx offload active: multi-segs 
     rss avail:         none
     rss active:        none
-    tx burst function: eth_em_xmit_pkts
-    rx burst function: eth_em_recv_scattered_pkts
-0: format_dpdk_device:590: rte_eth_dev_rss_hash_conf_get returned -95
+    tx burst function: virtio_xmit_pkts
+    rx burst function: virtio_recv_mergeable_pkts
 
+0: format_dpdk_device:590: rte_eth_dev_rss_hash_conf_get returned -95
 n4                                 2     up   n4
-  Link speed: 1 Gbps
-  Ethernet address 08:00:27:37:37:0c
-  Intel 82540EM (e1000)
-    carrier up full duplex mtu 9000 
-    flags: admin-up pmd maybe-multiseg tx-offload intel-phdr-cksum rx-ip4-cksum
+  Link speed: 4294 Gbps
+  Ethernet address bc:24:11:f6:bf:06
+  Red Hat Virtio
+    carrier up half duplex mtu 9000 
+    flags: admin-up pmd maybe-multiseg
     Devargs: 
-    rx: queues 1 (max 1), desc 1024 (min 32 max 4096 align 8)
-    tx: queues 1 (max 1), desc 1024 (min 32 max 4096 align 8)
-    pci: device 8086:100e subsystem 8086:001e address 0000:00:0a.00 numa 0
-    max rx packet len: 16128
+    rx: queues 1 (max 1), desc 256 (min 0 max 65535 align 1)
+    tx: queues 1 (max 1), desc 256 (min 0 max 65535 align 1)
+    pci: device 1af4:1000 subsystem 1af4:0001 address 0000:00:15.00 numa 0
+    max rx packet len: 9728
     promiscuous: unicast off all-multicast on
     vlan offload: strip off filter off qinq off
-    rx offload avail:  vlan-strip ipv4-cksum udp-cksum tcp-cksum vlan-filter 
-                       jumbo-frame scatter keep-crc 
-    rx offload active: ipv4-cksum jumbo-frame scatter 
-    tx offload avail:  vlan-insert ipv4-cksum udp-cksum tcp-cksum multi-segs 
-    tx offload active: udp-cksum tcp-cksum multi-segs 
+    rx offload avail:  vlan-strip udp-cksum tcp-cksum tcp-lro vlan-filter 
+                       jumbo-frame 
+    rx offload active: jumbo-frame 
+    tx offload avail:  vlan-insert udp-cksum tcp-cksum tcp-tso multi-segs 
+    tx offload active: multi-segs 
     rss avail:         none
     rss active:        none
-    tx burst function: eth_em_xmit_pkts
-    rx burst function: eth_em_recv_scattered_pkts
+    tx burst function: virtio_xmit_pkts
+    rx burst function: virtio_recv_mergeable_pkts
 
 n6                                 3     up   n6
-  Link speed: 1 Gbps
-  Ethernet address 08:00:27:2f:02:98
-  Intel 82540EM (e1000)
-    carrier up full duplex mtu 9000 
-    flags: admin-up pmd maybe-multiseg tx-offload intel-phdr-cksum rx-ip4-cksum
+  Link speed: 4294 Gbps
+  Ethernet address bc:24:11:e4:9c:d1
+  Red Hat Virtio
+    carrier up half duplex mtu 9000 
+    flags: admin-up pmd maybe-multiseg
     Devargs: 
-    rx: queues 1 (max 1), desc 1024 (min 32 max 4096 align 8)
-    tx: queues 1 (max 1), desc 1024 (min 32 max 4096 align 8)
-    pci: device 8086:100e subsystem 8086:001e address 0000:00:10.00 numa 0
-    max rx packet len: 16128
+    rx: queues 1 (max 1), desc 256 (min 0 max 65535 align 1)
+    tx: queues 1 (max 1), desc 256 (min 0 max 65535 align 1)
+    pci: device 1af4:1000 subsystem 1af4:0001 address 0000:00:16.00 numa 0
+    max rx packet len: 9728
     promiscuous: unicast off all-multicast on
     vlan offload: strip off filter off qinq off
-    rx offload avail:  vlan-strip ipv4-cksum udp-cksum tcp-cksum vlan-filter 
-                       jumbo-frame scatter keep-crc 
-    rx offload active: ipv4-cksum jumbo-frame scatter 
-    tx offload avail:  vlan-insert ipv4-cksum udp-cksum tcp-cksum multi-segs 
-    tx offload active: udp-cksum tcp-cksum multi-segs 
+    rx offload avail:  vlan-strip udp-cksum tcp-cksum tcp-lro vlan-filter 
+                       jumbo-frame 
+    rx offload active: jumbo-frame 
+    tx offload avail:  vlan-insert udp-cksum tcp-cksum tcp-tso multi-segs 
+    tx offload active: multi-segs 
     rss avail:         none
     rss active:        none
-    tx burst function: eth_em_xmit_pkts
-    rx burst function: eth_em_recv_scattered_pkts
+    tx burst function: virtio_xmit_pkts
+    rx burst function: virtio_recv_mergeable_pkts
 
+    tx frames ok                                           1
+    tx bytes ok                                           42
+    extended stats:
+      tx_good_packets                                      1
+      tx_good_bytes                                       42
+      tx_q0_packets                                        1
+      tx_q0_bytes                                         42
+      tx_q0_good_packets                                   1
+      tx_q0_good_bytes                                    42
+      tx_q0_broadcast_packets                              1
+      tx_q0_undersize_packets                              1
 upf-nwi-internet                   4     up   upf-nwi-internet
   Link speed: unknown
   GTPU
@@ -558,7 +562,7 @@ net.ipv4.ip_forward=1
 Next, configure NAPT and routing to N6 IP address of VPP-UPF.
 ```
 # iptables -t nat -A POSTROUTING -s <DN> -j MASQUERADE
-# ip route add <DN> via 192.168.16.151 dev enp0s9
+# ip route add <DN> via 192.168.16.151 dev ens20
 ```
 **Note. Set `<DN>` according to the core network.  
 ex) `10.45.0.0/16`**
@@ -846,26 +850,28 @@ vpp#
 ```
 # systemctl restart vpp
 # systemctl status vpp
-● vpp.service - vector packet processing engine
-     Loaded: loaded (/lib/systemd/system/vpp.service; enabled; vendor preset: enabled)
-     Active: active (running) since Sun 2024-05-05 00:54:16 JST; 1s ago
-    Process: 2547 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
-   Main PID: 2548 (vpp)
-      Tasks: 2 (limit: 9387)
-     Memory: 1.3G
-        CPU: 1.023s
+â vpp.service - vector packet processing engine
+     Loaded: loaded (/lib/systemd/system/vpp.service; disabled; vendor preset: enabled)
+     Active: active (running) since Mon 2024-10-14 06:17:55 JST; 8s ago
+    Process: 1080 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
+   Main PID: 1085 (vpp_main)
+      Tasks: 3 (limit: 9395)
+     Memory: 1.4G
+        CPU: 8.404s
      CGroup: /system.slice/vpp.service
-             └─2548 /usr/bin/vpp -c /etc/vpp/startup.conf
+             ââ1085 /usr/bin/vpp -c /etc/vpp/startup.conf
 
-May 05 00:54:16 upg-vpp-11 systemd[1]: Starting vector packet processing engine...
-May 05 00:54:16 upg-vpp-11 systemd[1]: Started vector packet processing engine.
-May 05 00:54:16 upg-vpp-11 vpp[2548]: perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
+Oct 14 06:17:55 upg-vpp11 systemd[1]: Starting vector packet processing engine...
+Oct 14 06:17:55 upg-vpp11 systemd[1]: Started vector packet processing engine.
+Oct 14 06:17:55 upg-vpp11 vpp[1085]: perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
+Oct 14 06:17:56 upg-vpp11 vpp[1085]: 0: linux_epoll_file_update:120: epoll_ctl: Operation not permitted (errno 1)
 ```
 
 <a id="changelog"></a>
 
 ## Changelog (summary)
 
+- [2024.10.14] Changed the VM environment from Virtualbox to Proxmox VE.
 - [2024.06.04] Added confirmation of operation with gNodeB of srsRAN_Project.
 - [2024.05.04] Changed the UPG-VPP OS from Ubuntu 20.04 to 22.04.
 - [2024.03.30] Updated to `v1.13.0` tag.
