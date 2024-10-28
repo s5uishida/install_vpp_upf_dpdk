@@ -68,7 +68,7 @@ The VPP-UPF used is as follows.
 - VPP-UPF - OpenAir CN 5G for UPF v1.5.1 (2023.05.15) - https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-upf-vpp
 
 Each VMs are as follows.  
-| VM | SW & Role | IP address | OS | CPU<br>(Min) | Memory<br>(Min) | HDD<br>(Min) |
+| VM | SW & Role | IP address | OS | CPU<br>(Min) | Mem<br>(Min) | HDD<br>(Min) |
 | --- | --- | --- | --- | --- | --- | --- |
 | VM-UP | OpenAir CN 5G for UPF | 192.168.0.151/24 | Ubuntu 22.04 | 2 | 8GB | 20GB |
 | VM-DN | Data Network Gateway  | 192.168.0.152/24 | Ubuntu 22.04 | 1 | 1GB | 10GB |
@@ -597,7 +597,7 @@ For a simple overview of VPP-UPF at the beginning of this article, read **OAI-CN
 
 VM-UP is as follows.
 
-| VM | SW & Role | IP address | OS | CPU<br>(Min) | Memory<br>(Min) | HDD<br>(Min) |
+| VM | SW & Role | IP address | OS | CPU<br>(Min) | Mem<br>(Min) | HDD<br>(Min) |
 | --- | --- | --- | --- | --- | --- | --- |
 | VM-UP | UPG-VPP U-Plane | 192.168.0.151/24 | Ubuntu 22.04 | 2 | 8GB | 20GB |
 
