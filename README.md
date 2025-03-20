@@ -875,7 +875,7 @@ vpp#
 Although the plugin load errors are output, this is not a problem as `dpdk_plugin.so` and `upf_plugin.so` can be loaded as shown below.
 ```
 vpp# show plugins 
- Plugin path is: /usr/lib/x86_64-linux-gnu/vpp_plugins/:/usr/local/lib/vpp_plugins/
+ Plugin path is: /usr/lib/x86_64-linux-gnu/vpp_plugins/
 
      Plugin                                   Version                          Description
   1. upf_plugin.so                            v1.13.0                          User Plane Gateway
