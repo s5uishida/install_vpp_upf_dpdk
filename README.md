@@ -346,7 +346,7 @@ dpdk {
 
 plugins {
   path /usr/lib/x86_64-linux-gnu/vpp_plugins/
-  plugin ikev2_plugin.so {disable}
+  plugin default {disable}
   plugin dpdk_plugin.so {enable}
   plugin upf_plugin.so {enable}
 }
@@ -415,8 +415,10 @@ upf specification release 16
 
 ```
 # /usr/bin/vpp -c /root/openair-upf/startup.conf
-clib_sysfs_prealloc_hugepages:260: pre-allocating 20 additional 2048K hugepages on numa node 0
-0: clib_sysfs_prealloc_hugepages:260: pre-allocating 8 additional 2048K hugepages on numa node 0
+0: vlib_sort_init_exit_functions:160: order constraint fcn 'dns_init' not found
+0: vnet_feature_arc_init:271: feature node 'acl-plugin-out-ip6-fa' not found (before 'ip6-dvr-reinject', arc 'ip6-output')
+0: vnet_feature_arc_init:271: feature node 'nat44-in2out-output' not found (before 'ip4-dvr-reinject', arc 'ip4-output')
+0: vnet_feature_arc_init:271: feature node 'acl-plugin-out-ip4-fa' not found (before 'ip4-dvr-reinject', arc 'ip4-output')
 dpdk             [warn  ]: not enough DPDK crypto resources
 dpdk             [warn  ]: unsupported rx offloads requested on port 0: scatter 
 dpdk             [warn  ]: unsupported rx offloads requested on port 1: scatter 
@@ -753,25 +755,23 @@ Then see [here](#conf) for the original files.
 - `openair-upf/startup.conf`  
 
 ```diff
---- startup.conf.orig   2023-07-09 11:59:18.000000000 +0900
-+++ startup.conf        2023-11-12 15:54:33.395276365 +0900
+--- startup.conf.orig   2025-03-20 21:51:27.000000000 +0900
++++ startup.conf        2025-03-20 21:51:49.000000000 +0900
 @@ -1,3 +1,5 @@
 +heapsize 2G
 +
  unix {
    nodaemon
    log /tmp/vpp.log
-@@ -28,8 +30,8 @@
+@@ -28,7 +30,7 @@
  }
  
  plugins {
 -  path /usr/lib/x86_64-linux-gnu/vpp_plugins/
--  plugin ikev2_plugin.so {disable}
 +  path /usr/local/vpp/lib/x86_64-linux-gnu/vpp_plugins/
-+  plugin oddbuf_plugin.so {enable}
+   plugin default {disable}
    plugin dpdk_plugin.so {enable}
    plugin upf_plugin.so {enable}
- }
 ```
 
 - `openair-upf/init.conf`  
@@ -787,8 +787,8 @@ Then see [here](#conf) for the original files.
 - `/etc/vpp/startup.conf`  
 
 ```diff
---- startup.conf.orig   2023-07-09 11:59:18.000000000 +0900
-+++ startup.conf        2024-02-24 12:22:32.506567556 +0900
+--- startup.conf.orig   2025-03-20 21:51:27.000000000 +0900
++++ startup.conf        2025-03-20 21:51:39.000000000 +0900
 @@ -1,3 +1,5 @@
 +heapsize 2G
 +
@@ -804,17 +804,15 @@ Then see [here](#conf) for the original files.
  }
  
  api-trace {
-@@ -28,8 +30,8 @@
+@@ -28,7 +30,7 @@
  }
  
  plugins {
 -  path /usr/lib/x86_64-linux-gnu/vpp_plugins/
--  plugin ikev2_plugin.so {disable}
 +  path /usr/lib/x86_64-linux-gnu/vpp_plugins/:/usr/local/lib/vpp_plugins/
-+  plugin oddbuf_plugin.so {enable}
+   plugin default {disable}
    plugin dpdk_plugin.so {enable}
    plugin upf_plugin.so {enable}
- }
 ```
 
 - `/etc/vpp/init.conf`  
@@ -833,12 +831,55 @@ First, create group `vpp` if it doesn't exist.
 Then run UPG-VPP with DPDK.
 ```
 # /usr/local/vpp/bin/vpp -c /root/openair-upf/startup.conf
-perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
+vat-plug/load      [error ]: vat_plugin_register: af_xdp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: lacp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: arping plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: nsim plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: l2tp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: lb plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: oddbuf plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: memif plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: tracedump plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: dns plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: avf plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: mdata plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: builtinurl plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: gtpu plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: vmxnet3 plugin not loaded...
+vat-plug/load      [error ]: pot_vat_plugin_register: pot plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: vrrp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: geneve plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: cdp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: stn plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: mactime plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: ct6 plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: rdma plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: adl plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: acl plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: http_static plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: pppoe plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: ikev2 plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register_gpe: lisp_gpe plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: dhcp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: lldp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: flowprobe plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: nsh plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: tls_openssl plugin not loaded...
     _______    _        _   _____  ___ 
  __/ __/ _ \  (_)__    | | / / _ \/ _ \
  _/ _// // / / / _ \   | |/ / ___/ ___/
  /_/ /____(_)_/\___/   |___/_/  /_/    
 
+vpp# 
+```
+Although the plugin load errors are output, this is not a problem as `dpdk_plugin.so` and `upf_plugin.so` can be loaded as shown below.
+```
+vpp# show plugins 
+ Plugin path is: /usr/lib/x86_64-linux-gnu/vpp_plugins/:/usr/local/lib/vpp_plugins/
+
+     Plugin                                   Version                          Description
+  1. upf_plugin.so                            v1.13.0                          User Plane Gateway
+  2. dpdk_plugin.so                           22.10.0-33~g9c3f6d4cd            Data Plane Development Kit (DPDK)
 vpp# 
 ```
 
@@ -851,19 +892,25 @@ vpp#
 # systemctl status vpp
 â vpp.service - vector packet processing engine
      Loaded: loaded (/lib/systemd/system/vpp.service; disabled; vendor preset: enabled)
-     Active: active (running) since Mon 2024-10-14 06:17:55 JST; 8s ago
-    Process: 1080 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
-   Main PID: 1085 (vpp_main)
+     Active: active (running) since Thu 2025-03-20 22:14:02 JST; 8s ago
+    Process: 1139 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
+   Main PID: 1145 (vpp_main)
       Tasks: 3 (limit: 9395)
-     Memory: 1.4G
-        CPU: 8.404s
+     Memory: 1.3G
+        CPU: 8.856s
      CGroup: /system.slice/vpp.service
-             ââ1085 /usr/bin/vpp -c /etc/vpp/startup.conf
+             ââ1145 /usr/bin/vpp -c /etc/vpp/startup.conf
 
-Oct 14 06:17:55 upg-vpp11 systemd[1]: Starting vector packet processing engine...
-Oct 14 06:17:55 upg-vpp11 systemd[1]: Started vector packet processing engine.
-Oct 14 06:17:55 upg-vpp11 vpp[1085]: perfmon              [warn  ]: skipping source 'intel-uncore' - intel_uncore_init: no uncore units found
-Oct 14 06:17:56 upg-vpp11 vpp[1085]: 0: linux_epoll_file_update:120: epoll_ctl: Operation not permitted (errno 1)
+Mar 20 22:14:03 upg-vpp11 vnet[1145]: vat-plug/load: vat_plugin_register: acl plugin not loaded...
+Mar 20 22:14:03 upg-vpp11 vnet[1145]: vat-plug/load: vat_plugin_register: http_static plugin not loaded...
+Mar 20 22:14:03 upg-vpp11 vnet[1145]: vat-plug/load: vat_plugin_register: pppoe plugin not loaded...
+Mar 20 22:14:03 upg-vpp11 vnet[1145]: vat-plug/load: vat_plugin_register: ikev2 plugin not loaded...
+Mar 20 22:14:03 upg-vpp11 vnet[1145]: vat-plug/load: vat_plugin_register_gpe: lisp_gpe plugin not loaded...
+Mar 20 22:14:03 upg-vpp11 vnet[1145]: vat-plug/load: vat_plugin_register: dhcp plugin not loaded...
+Mar 20 22:14:03 upg-vpp11 vnet[1145]: vat-plug/load: vat_plugin_register: lldp plugin not loaded...
+Mar 20 22:14:03 upg-vpp11 vnet[1145]: vat-plug/load: vat_plugin_register: flowprobe plugin not loaded...
+Mar 20 22:14:03 upg-vpp11 vnet[1145]: vat-plug/load: vat_plugin_register: nsh plugin not loaded...
+Mar 20 22:14:03 upg-vpp11 vnet[1145]: vat-plug/load: vat_plugin_register: tls_openssl plugin not loaded...
 ```
 
 <a id="changelog"></a>
