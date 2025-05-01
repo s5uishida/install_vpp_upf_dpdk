@@ -31,6 +31,7 @@ This briefly describes the steps and configuration to build and install [oai-cn5
 - [Run VPP-UPF with DPDK on VM-UP](#run)
   - [Verify interfaces at VPP](#verify)
 - [Setup Data Network Gateway on VM-DN](#setup_dn)
+- [How to capture packets on DPDK ports](#pcap)
 - [Sample Configurations](#sample_conf)
   - [For 5G](#5g_conf)
   - [For 4G](#4g_conf)
@@ -568,6 +569,15 @@ Next, configure NAPT and routing to N6 IP address of VPP-UPF.
 ```
 **Note. Set `<DN>` according to the core network.  
 ex) `10.45.0.0/16`**
+
+<a id="pcap"></a>
+
+## How to capture packets on DPDK ports
+
+There are two ways to do this.
+
+1. [How to run `dpdk-dumpcap`](https://doc.dpdk.org/guides/howto/packet_capture_framework.html)
+2. [How to run `tcpdump` on another VM by configuring a bridge interface linked to a network interface under DPDK control](https://github.com/s5uishida/proxmox_ve_tips#enable_promisc)
 
 ---
 With the above steps, the VPP-UPF environment with DPDK has been constructed.
