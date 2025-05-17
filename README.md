@@ -577,7 +577,7 @@ ex) `10.45.0.0/16`**
 There are two ways to do this.
 
 1. [How to run `dpdk-dumpcap`](https://doc.dpdk.org/guides/howto/packet_capture_framework.html)
-2. [How to run `tcpdump` on another VM by configuring a bridge interface linked to a network interface under DPDK control](https://github.com/s5uishida/proxmox_ve_tips#enable_promisc)
+2. [How to run `tcpdump` or `tshark` on another VM by configuring a bridge interface linked to a network interface under DPDK control](https://github.com/s5uishida/proxmox_ve_tips#enable_promisc)
 
 ---
 With the above steps, the VPP-UPF environment with DPDK has been constructed.
