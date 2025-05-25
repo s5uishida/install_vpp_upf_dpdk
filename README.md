@@ -774,14 +774,14 @@ I would like to thank the excellent developers and all the contributors of UPG-V
 
 ### For 5G
 
-- [Open5GS 5GC & UERANSIM UE / RAN Sample Configuration - VPP-UPF with DPDK](https://github.com/s5uishida/open5gs_5gc_ueransim_vpp_upf_dpdk_sample_config)
-- [free5GC 5GC & UERANSIM UE / RAN Sample Configuration - VPP-UPF with DPDK](https://github.com/s5uishida/free5gc_ueransim_vpp_upf_dpdk_sample_config)
+- [Open5GS 5GC & UERANSIM UE / RAN Sample Configuration - UPG-VPP(VPP/DPDK UPF)](https://github.com/s5uishida/open5gs_5gc_ueransim_vpp_upf_dpdk_sample_config)
+- [free5GC 5GC & UERANSIM UE / RAN Sample Configuration - UPG-VPP(VPP/DPDK UPF)](https://github.com/s5uishida/free5gc_ueransim_vpp_upf_dpdk_sample_config)
 
 <a id="4g_conf"></a>
 
 ### For 4G
 
-- [Open5GS EPC & srsRAN 4G with ZeroMQ UE / RAN Sample Configuration - VPP-UPF(PGW-U) with DPDK](https://github.com/s5uishida/open5gs_epc_srsran_vpp_upf_dpdk_sample_config)
+- [Open5GS EPC & srsRAN 4G with ZeroMQ UE / RAN Sample Configuration - UPG-VPP(VPP/DPDK UPF(PGW-U))](https://github.com/s5uishida/open5gs_epc_srsran_vpp_upf_dpdk_sample_config)
 
 <a id="changelog"></a>
 
