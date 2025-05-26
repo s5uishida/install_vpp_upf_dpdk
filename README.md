@@ -1,5 +1,3 @@
-<a id="annex_1"></a>
-
 # Install UPG-VPP(VPP/DPDK UPF) on Host
 This briefly describes the steps and configuration to build and install [travelping/upg-vpp](https://github.com/travelping/upg-vpp).
 **It is intended to be prepared for use with [Open5GS](https://github.com/open5gs/open5gs) and [free5GC](https://github.com/free5gc/free5gc).**
