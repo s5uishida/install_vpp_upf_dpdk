@@ -29,6 +29,7 @@ This briefly describes the steps and configuration to build and install [travelp
     - [Bind ens20/ens21/ens22 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)](#bind_interfaces)
     - [Verify DPDK binding](#verify_binding)
   - [Case of using kernel module "vfio-pci"](#vfio_pci)
+  - [Network settings](#network_settings)
   - [Create configuration files](#conf)
 - [Run UPG-VPP on VM-UP](#run)
   - [Run UPG-VPP when installing the built packages](#run_pkg)
@@ -70,7 +71,7 @@ The network interfaces of each VM are as follows.
 These devices will be enabled and set IP addresses in the `init.conf` file of UPG-VPP.**
 | VM | Device | Model | Linux Bridge | IP address | Interface | Under DPDK |
 | --- | --- | --- | --- | --- | --- | --- |
-| VM-UP | ens18 | VirtIO | vmbr1 | 10.0.0.151/24 | (NAPT NW) | -- |
+| VM-UP | ~~ens18~~ | ~~VirtIO~~ | ~~vmbr1~~ | ~~10.0.0.151/24~~ | ~~(NAPT NW)~~ ***down*** | -- |
 | | ens19 | VirtIO | mgbr0 | 192.168.0.151/24 | (Mgmt NW) | -- |
 | | ens20 | VirtIO | vmbr3 | 192.168.13.151/24 | N3 | x |
 | | ens21 | VirtIO | vmbr4 | 192.168.14.151/24 | N4 | x |
@@ -361,6 +362,15 @@ When using the kernel built-in **vfio-pci** module, please down the `ens20`/`ens
 And, refer to [this](https://doc.dpdk.org/guides/linux_gsg/linux_drivers.html) and set the kernel to IOMMU mode.
 Alternatively, it can be used in No-IOMMU mode.
 Then, these interfaces are under DPDK control by running `vpp` without explicit **vfio-pci** binding.
+
+<a id="network_settings"></a>
+
+### Network settings
+
+Down the default interface ens18 of the VM-UP and disable the default GW of ens18.
+```
+# ip link set dev ens18 down
+```
 
 <a id="conf"></a>
 
