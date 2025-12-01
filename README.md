@@ -1,4 +1,4 @@
-# Install UPG-VPP(VPP/DPDK UPF) on Host
+# Install UPG-VPP(DPDK/VPP UPF) on Host
 This briefly describes the steps and configuration to build and install [travelping/upg-vpp](https://github.com/travelping/upg-vpp).
 **It is intended to be prepared for use with [Open5GS](https://github.com/open5gs/open5gs) and [free5GC](https://github.com/free5gc/free5gc).**
 
@@ -57,8 +57,8 @@ The built simulation environment is as follows.
 
 <img src="./images/network-overview.png" title="./images/network-overview.png" width=800px></img>
 
-The VPP/DPDK UPF used is as follows.
-- VPP/DPDK UPF - UPG-VPP v1.13.0 (2024.03.25) - https://github.com/travelping/upg-vpp
+The DPDK/VPP UPF used is as follows.
+- DPDK/VPP UPF - UPG-VPP v1.13.0 (2024.03.25) - https://github.com/travelping/upg-vpp
 
 Each VMs are as follows.  
 | VM | SW & Role | IP address | OS | CPU<br>(Min) | Mem<br>(Min) | HDD<br>(Min) |
@@ -782,14 +782,14 @@ I would like to thank the excellent developers and all the contributors of UPG-V
 
 ### For 5G
 
-- [Open5GS 5GC & UERANSIM UE / RAN Sample Configuration - UPG-VPP(VPP/DPDK UPF)](https://github.com/s5uishida/open5gs_5gc_ueransim_vpp_upf_dpdk_sample_config)
-- [free5GC 5GC & UERANSIM UE / RAN Sample Configuration - UPG-VPP(VPP/DPDK UPF)](https://github.com/s5uishida/free5gc_ueransim_vpp_upf_dpdk_sample_config)
+- [Open5GS 5GC & UERANSIM UE / RAN Sample Configuration - UPG-VPP(DPDK/VPP UPF)](https://github.com/s5uishida/open5gs_5gc_ueransim_vpp_upf_dpdk_sample_config)
+- [free5GC 5GC & UERANSIM UE / RAN Sample Configuration - UPG-VPP(DPDK/VPP UPF)](https://github.com/s5uishida/free5gc_ueransim_vpp_upf_dpdk_sample_config)
 
 <a id="4g_conf"></a>
 
 ### For 4G
 
-- [Open5GS EPC & srsRAN 4G with ZeroMQ UE / RAN Sample Configuration - UPG-VPP(VPP/DPDK UPF(PGW-U))](https://github.com/s5uishida/open5gs_epc_srsran_vpp_upf_dpdk_sample_config)
+- [Open5GS EPC & srsRAN 4G with ZeroMQ UE / RAN Sample Configuration - UPG-VPP(DPDK/VPP UPF(PGW-U))](https://github.com/s5uishida/open5gs_epc_srsran_vpp_upf_dpdk_sample_config)
 
 <a id="changelog"></a>
 
