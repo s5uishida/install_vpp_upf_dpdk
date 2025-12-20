@@ -805,7 +805,7 @@ I would like to thank the excellent developers and all the contributors of UPG-V
 
 ## Changelog (summary)
 
-- [2025.12.20] Added a note about the QFI patch released by @mitmitmitm.
+- [2025.12.20] Added a note about the QFI patch by @mitmitmitm.
 - [2025.05.25] Deleted the description of the build procedure for [oai-cn5g-upf-vpp](https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-upf-vpp), and changed to UPG-VPP only.
 - [2024.10.14] Changed the VM environment from Virtualbox to Proxmox VE.
 - [2024.06.04] Added confirmation of operation with gNodeB of srsRAN_Project.
