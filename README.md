@@ -245,7 +245,7 @@ In that case, you may try the following patches.
 
 1. [Temporary patch](./patches/gtp_ext_hdr_qfi_1.patch) for UPG-VPP v1.13.0 based on the OAI patch by referring to [here](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1935837642). QFI is fixed to 1.
    
-3. [Patch released by @mitmitmitm](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1938190509). To get this patch as follows.
+3. [Patch by @mitmitmitm](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1938190509). To get this patch as follows.
    ```
    # wget https://github.com/travelping/upg-vpp/compare/master...mitmitmitm:upg-vpp:qfi.diff -O mitmitmitm-qfi.diff
    ```
