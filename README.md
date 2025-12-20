@@ -20,8 +20,8 @@ This briefly describes the steps and configuration to build and install [travelp
     - [Build binaries for debugging](#build_vpp_debug)
     - [Install the built VPP packages](#install_vpp_pkg)
   - [Build UPG-VPP v1.13.0](#build_upg_vpp)
-    - [QFI support in PDU Session Container](#pdu_session_container_qfi)
     - [Install the built UPG-VPP packages](#install_upg_vpp_pkg)
+    - [QFI support in PDU Session Container](#pdu_session_container_qfi)
 - [Setup UPG-VPP on VM-UP](#setup_up)
   - [Install dpdk-devbind.py](#install_dpdk)
   - [Case of using kernel module "uio_pci_generic"](#uio_pci_generic)
@@ -221,6 +221,20 @@ If you want to install the built `upf_plugin.so` etc as packages without manuall
 -rw-r--r-- 1 root root   38746 May  4 23:57 upf-plugin-dev_1.13.0_amd64.deb
 ```
 
+<a id="install_upg_vpp_pkg"></a>
+
+#### Install the built UPG-VPP packages
+
+If you want to install the UPG-VPP packages on a host other than the one on which these were built, first install the following dependent packages.
+```
+# apt install libhyperscan-dev
+```
+Then install the UPG-VPP packages.
+```
+# cd build
+# dpkg -i *.deb
+```
+
 <a id="pdu_session_container_qfi"></a>
 
 #### QFI support in PDU Session Container
@@ -236,20 +250,6 @@ In that case, you may try the following patches.
    # wget https://github.com/travelping/upg-vpp/compare/master...mitmitmitm:upg-vpp:qfi.diff -O mitmitmitm-qfi.diff
    ```
 I simply verified that both of these patched UPG-VPPs work with the srsRAN_Project gNodeB.
-
-<a id="install_upg_vpp_pkg"></a>
-
-#### Install the built UPG-VPP packages
-
-If you want to install the UPG-VPP packages on a host other than the one on which these were built, first install the following dependent packages.
-```
-# apt install libhyperscan-dev
-```
-Then install the UPG-VPP packages.
-```
-# cd build
-# dpkg -i *.deb
-```
 
 <a id="setup_up"></a>
 
