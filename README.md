@@ -20,6 +20,7 @@ This briefly describes the steps and configuration to build and install [travelp
     - [Build binaries for debugging](#build_vpp_debug)
     - [Install the built VPP packages](#install_vpp_pkg)
   - [Build UPG-VPP v1.13.0](#build_upg_vpp)
+    - [QFI support in PDU Session Container](#pdu_session_container_qfi)
     - [Install the built UPG-VPP packages](#install_upg_vpp_pkg)
 - [Setup UPG-VPP on VM-UP](#setup_up)
   - [Install dpdk-devbind.py](#install_dpdk)
@@ -211,13 +212,6 @@ This allows you to operate VPP service using `systemctl`.
 ```
 Now the UPG-VPP was built in `/usr/local/vpp`.
 
-**Note.
-UPG-VPP v1.13.0 does not support `PDU Session container`.
-Therefore, some gNodeBs may not accept GTP traffic from UPG-VPP that does not contain `DL PDU SESSION INFORMATION` in the `PDU Session container`.
-In that case, there is a way to try the OAI patch by referring to [here](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1935837642).
-Also, [this](./patches/gtp_ext_hdr_qfi_1.patch) is a temporary patch for UPG-VPP v1.13.0 based on the OAI patch. QFI is fixed to 1.
-I confirmed that it works with the gNodeB of srsRAN_Project.**
-
 If you want to install the built `upf_plugin.so` etc as packages without manually copying these, build binary packages as follows.
 ```
 # make package
@@ -226,6 +220,22 @@ If you want to install the built `upf_plugin.so` etc as packages without manuall
 -rw-r--r-- 1 root root 2866388 May  4 23:57 upf-plugin_1.13.0_amd64.deb
 -rw-r--r-- 1 root root   38746 May  4 23:57 upf-plugin-dev_1.13.0_amd64.deb
 ```
+
+<a id="pdu_session_container_qfi"></a>
+
+#### QFI support in PDU Session Container
+
+UPG-VPP v1.13.0 does not support `PDU Session Container`.
+Therefore, some gNodeBs may not accept GTP traffic from UPG-VPP that does not contain `DL PDU SESSION INFORMATION` in the `PDU Session Container`.
+In that case, you may try the following patches.
+
+1. [Temporary patch](./patches/gtp_ext_hdr_qfi_1.patch) for UPG-VPP v1.13.0 based on the OAI patch by referring to [here](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1935837642). QFI is fixed to 1.
+   
+3. [Patch released by @mitmitmitm](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1938190509). To get this patch as follows.
+   ```
+   # wget https://github.com/travelping/upg-vpp/compare/master...mitmitmitm:upg-vpp:qfi.diff -O mitmitmitm-qfi.diff
+   ```
+I simply verified that both of these patched UPG-VPPs work with the srsRAN_Project gNodeB.
 
 <a id="install_upg_vpp_pkg"></a>
 
@@ -795,6 +805,7 @@ I would like to thank the excellent developers and all the contributors of UPG-V
 
 ## Changelog (summary)
 
+- [2025.12.20] Added a note about the QFI patch released by @mitmitmitm.
 - [2025.05.25] Deleted the description of the build procedure for [oai-cn5g-upf-vpp](https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-upf-vpp), and changed to UPG-VPP only.
 - [2024.10.14] Changed the VM environment from Virtualbox to Proxmox VE.
 - [2024.06.04] Added confirmation of operation with gNodeB of srsRAN_Project.
