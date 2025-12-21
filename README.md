@@ -243,13 +243,16 @@ UPG-VPP v1.13.0 does not support `PDU Session Container`.
 Therefore, some gNodeBs may not accept GTP traffic from UPG-VPP that does not contain `DL PDU SESSION INFORMATION` in the `PDU Session Container`.
 In that case, you may try the following patches.
 
-1. [Temporary patch](./patches/gtp_ext_hdr_qfi_1.patch) for UPG-VPP v1.13.0 based on the OAI patch by referring to [here](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1935837642). QFI is fixed to 1.
-   
+1. [Temporary patch](./patches/gtp_ext_hdr_qfi_1.patch) for UPG-VPP v1.13.0 based on the OAI patch by referring to [here](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1935837642). QFI is fixed to 1.  
+   When pinging between UEs, the UL GTP-U packets from UPG-VPP to gNodeB contain `PDU Session Container` with QFI, but the return DL GTP-U packets from UPG-VPP to gNodeB do not contain `PDU Session Container` with QFI.  
 2. [Patch by @mitmitmitm](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1938190509). To get this patch as follows.
+   
    ```
    # wget https://github.com/travelping/upg-vpp/compare/master...mitmitmitm:upg-vpp:qfi.diff -O mitmitmitm-qfi.diff
    ```
-I simply verified that both of these patched UPG-VPPs work with the srsRAN_Project gNodeB.
+   When pinging between UEs, the GTP-U packets for both UL/DL from UPG-VPP to gNodeB contain `PDU Session Container` with QFI.
+
+In addition, with either UPG-VPP, when pinging between the UE and an external node, the GTP-U packets for both UL/DL from UPG-VPP to gNodeB contain `PDU Session Container` with QFI.
 
 <a id="setup_up"></a>
 
