@@ -248,7 +248,7 @@ In that case, you may try the following patches.
 2. [Patch by @mitmitmitm](https://github.com/travelping/upg-vpp/issues/387#issuecomment-1938190509). To get this patch as follows.
    
    ```
-   # wget https://github.com/travelping/upg-vpp/compare/master...mitmitmitm:upg-vpp:qfi.diff -O mitmitmitm-qfi.diff
+   # wget https://github.com/travelping/upg-vpp/compare/master...mitmitmitm:upg-vpp:qfi.diff -O mitmitmitm-qfi.patch
    ```
    When pinging between UEs, the GTP-U packets for both UL/DL from UPG-VPP to gNodeB contain `PDU Session Container` with QFI.
 
