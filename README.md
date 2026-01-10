@@ -176,7 +176,7 @@ Then build binary packages as follows.
 
 #### Install the built VPP packages
 
-When you want to install the VPP packages on a host, first install the following dependent packages.
+When you want to install the VPP packages on another host, first install the following dependent packages.
 ```
 # apt install libnl-route-3-200
 ```
@@ -215,7 +215,7 @@ Then build binary packages as follows.
 
 #### Install the built UPG-VPP packages
 
-When you want to install the UPG-VPP packages on a host, first install the following dependent packages.
+When you want to install the UPG-VPP packages on another host, first install the following dependent packages.
 ```
 # apt install libhyperscan-dev
 ```
