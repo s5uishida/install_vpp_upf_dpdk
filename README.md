@@ -24,12 +24,12 @@ This briefly describes the steps and configuration to build and install [travelp
     - [QFI support in PDU Session Container](#pdu_session_container_qfi)
 - [Setup UPG-VPP on VM-UP](#setup_up)
   - [Install dpdk-devbind.py](#install_dpdk)
-  - [Case of using kernel module "uio_pci_generic"](#uio_pci_generic)
-    - [Load kernel module "uio_pci_generic"](#load_module)
+  - [Case of using kernel module **uio_pci_generic**](#uio_pci_generic)
+    - [Load kernel module **uio_pci_generic**](#load_module)
     - [Check Interfaces](#check_interfaces)
     - [Bind ens20/ens21/ens22 interfaces to DPDK compatible driver (e.g. uio_pci_generic here)](#bind_interfaces)
     - [Verify DPDK binding](#verify_binding)
-  - [Case of using kernel module "vfio-pci"](#vfio_pci)
+  - [Case of using kernel module **vfio-pci**](#vfio_pci)
   - [Network settings](#network_settings)
   - [Create configuration files](#conf)
 - [Run UPG-VPP on VM-UP](#run)
@@ -259,11 +259,11 @@ In addition, with either UPG-VPP, when pinging between the UE and an external no
 
 <a id="uio_pci_generic"></a>
 
-### Case of using kernel module "uio_pci_generic"
+### Case of using kernel module uio_pci_generic
 
 <a id="load_module"></a>
 
-#### Load kernel module "uio_pci_generic"
+#### Load kernel module uio_pci_generic
 
 ```
 # modprobe uio_pci_generic
@@ -359,7 +359,7 @@ No 'ML' devices detected
 
 <a id="vfio_pci"></a>
 
-### Case of using kernel module "vfio-pci"
+### Case of using kernel module vfio-pci
 
 When using the kernel built-in **vfio-pci** module, please down the `ens20`/`ens21`/`ens22` interfaces in advance.
 And, refer to [this](https://doc.dpdk.org/guides/linux_gsg/linux_drivers.html) and set the kernel to IOMMU mode.
