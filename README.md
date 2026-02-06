@@ -472,7 +472,7 @@ upf nwi name internet vrf 0
 
 upf specification release 16
 
-upf gtpu endpoint ip 192.168.13.151 nwi internet teid 0x000004d2/2
+upf gtpu endpoint ip 192.168.13.151 nwi internet
 ```
 By adding the following line as in `init.conf` above,
 ```
