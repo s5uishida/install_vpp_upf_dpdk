@@ -466,7 +466,7 @@ ip route add 0.0.0.0/0 table 0 via 192.168.16.152 n6
 
 upf pfcp endpoint ip 192.168.14.151 vrf 0
 
-upf node-id fqdn 192.168.14.151
+upf node-id ip4 192.168.14.151
 
 upf nwi name internet vrf 0
 
