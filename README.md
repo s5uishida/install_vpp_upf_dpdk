@@ -546,6 +546,10 @@ vpp# show plugins
   2. dpdk_plugin.so                           22.10.0-33~g612d3915c            Data Plane Development Kit (DPDK)
 vpp# 
 ```
+To check the log, run the following command. If necessary, change the log level in `startup.conf`.
+```
+vpp# show logging
+```
 
 <a id="run_pkg"></a>
 
