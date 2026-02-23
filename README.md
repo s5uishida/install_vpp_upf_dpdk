@@ -396,6 +396,10 @@ unix {
   exec /root/upg-vpp/init.conf
 }
 
+logging {
+  default-log-level info
+}
+
 api-trace {
   on
 }
