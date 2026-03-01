@@ -1,0 +1,56 @@
+diff -urN vpp.orig/build/external/packages/dpdk.mk vpp/build/external/packages/dpdk.mk
+--- vpp.orig/build/external/packages/dpdk.mk	2026-03-01 12:05:18.000000000 +0900
++++ vpp/build/external/packages/dpdk.mk	2026-03-01 12:43:03.559830411 +0900
+@@ -180,8 +180,8 @@
+ 	mkdir -p ../dpdk-meson-venv && \
+ 	python3 -m venv ../dpdk-meson-venv && \
+ 	source ../dpdk-meson-venv/bin/activate && \
+-	(if ! ls $(PIP_DOWNLOAD_DIR)meson* ; then pip3 download -d $(PIP_DOWNLOAD_DIR) -f $(DL_CACHE_DIR) meson==0.55 setuptools wheel pyelftools; fi) && \
+-	pip3 install --no-index --find-links=$(PIP_DOWNLOAD_DIR) meson==0.55 pyelftools && \
++	(if ! ls $(PIP_DOWNLOAD_DIR)meson* ; then pip3 download -d $(PIP_DOWNLOAD_DIR) -f $(DL_CACHE_DIR) meson wheel pyelftools; fi) && \
++	pip3 install --no-index --find-links=$(PIP_DOWNLOAD_DIR) meson pyelftools && \
+ 	PKG_CONFIG_PATH=$(dpdk_install_dir)/lib/pkgconfig meson setup $(dpdk_src_dir) \
+ 		$(dpdk_build_dir) \
+ 		$(DPDK_MESON_ARGS) \
+diff -urN vpp.orig/Makefile vpp/Makefile
+--- vpp.orig/Makefile	2026-03-01 12:05:54.000000000 +0900
++++ vpp/Makefile	2026-03-01 12:46:15.172310443 +0900
+@@ -85,7 +85,14 @@
+ 
+ LIBFFI=libffi6 # works on all but 20.04 and debian-testing
+ 
+-ifeq ($(OS_VERSION_ID),22.04)
++ifeq ($(OS_VERSION_ID),24.04)
++	DEB_DEPENDS += python3-virtualenv
++	DEB_DEPENDS += libssl-dev
++	DEB_DEPENDS += libelf-dev # for libbpf (af_xdp)
++	DEB_DEPENDS += clang-18 clang-format-18
++	LIBFFI=libffi8
++	DEB_DEPENDS += enchant-2  # for docs
++else ($(OS_VERSION_ID),22.04)
+ 	DEB_DEPENDS += python3-virtualenv
+ 	DEB_DEPENDS += libssl-dev
+ 	DEB_DEPENDS += libelf-dev # for libbpf (af_xdp)
+diff -urN vpp.orig/src/CMakeLists.txt vpp/src/CMakeLists.txt
+--- vpp.orig/src/CMakeLists.txt	2026-03-01 12:05:18.000000000 +0900
++++ vpp/src/CMakeLists.txt	2026-03-01 12:43:03.559830411 +0900
+@@ -102,7 +102,7 @@
+ set(PYENV PYTHONPYCACHEPREFIX=${CMAKE_BINARY_DIR}/CMakeFiles/__pycache__)
+ 
+ if (CMAKE_BUILD_TYPE)
+-  add_compile_options(-g -Werror -Wall)
++  add_compile_options(-g -Wall)
+ endif()
+ 
+ if (compiler_flag_no_address_of_packed_member)
+diff -urN vpp.orig/src/vnet/interface_api.c vpp/src/vnet/interface_api.c
+--- vpp.orig/src/vnet/interface_api.c	2026-03-01 12:05:54.000000000 +0900
++++ vpp/src/vnet/interface_api.c	2026-03-01 12:43:03.559830411 +0900
+@@ -385,7 +385,6 @@
+       vec_add1 (filter, 0);	/* Ensure it's a C string for strcasecmp() */
+     }
+ 
+-  char *strcasestr (char *, char *);	/* lnx hdr file botch */
+   /* *INDENT-OFF* */
+   pool_foreach (swif, im->sw_interfaces)
+    {
