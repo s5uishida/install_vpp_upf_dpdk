@@ -16,6 +16,7 @@ This briefly describes the steps and configuration to build and install [travelp
 - [Build UPG-VPP on VM-UP](#build)
   - [Confirmed Version List](#ver_list)
   - [Install required packages](#install_pkg)
+  - [Get the patch to build on Ubuntu 24.04](#get_patch)
   - [Build VPP v22.10 applied with patches of FPP-VPP v22.10.13](#build_vpp)
     - [Build binaries for debugging](#build_vpp_debug)
     - [Install the built VPP packages](#install_vpp_pkg)
@@ -64,7 +65,7 @@ The DPDK/VPP UPF used is as follows.
 Each VMs are as follows.  
 | VM | SW & Role | IP address | OS | CPU<br>(Min) | Mem<br>(Min) | HDD<br>(Min) |
 | --- | --- | --- | --- | --- | --- | --- |
-| VM-UP | UPG-VPP U-Plane | 192.168.0.151/24 | Ubuntu 22.04 | 2 | 8GB | 20GB |
+| VM-UP | UPG-VPP U-Plane | 192.168.0.151/24 | Ubuntu 24.04 | 2 | 8GB | 20GB |
 | VM-DN | Data Network Gateway  | 192.168.0.152/24 | Ubuntu 24.04 | 1 | 1GB | 10GB |
 
 The network interfaces of each VM are as follows.
@@ -120,6 +121,14 @@ I simply confirmed the operation of the following versions.
 # apt install build-essential
 ```
 
+<a id="get_patch"></a>
+
+### Get the patch to build on Ubuntu 24.04
+
+```
+# wget https://raw.githubusercontent.com/s5uishida/install_vpp_upf_dpdk/refs/heads/main/patches/build_vpp_ubuntu_24_04.patch
+```
+
 <a id="build_vpp"></a>
 
 ### Build VPP v22.10 applied with patches of FPP-VPP v22.10.13
@@ -137,9 +146,14 @@ I simply confirmed the operation of the following versions.
 # git checkout stable/2210
 # git reset --hard 07e0c05e698cf5ffd1e2d2de0296d1907519dc3d
 # git am ../fpp-vpp/vpp-patches/*.patch
+# patch -p1 < ~/build_vpp_ubuntu_24_04.patch
 # make install-dep
 # make install-ext-deps
 # make build-release
+```
+**If not building on Ubuntu 24.04, do not apply the patch below.**
+```
+# patch -p1 < ~/build_vpp_ubuntu_24_04.patch
 ```
 Then build binary packages as follows.
 ```
@@ -147,15 +161,15 @@ Then build binary packages as follows.
 ...
 # cd build-root
 # ls -l *.deb
--rw-r--r-- 1 root root   194448 Jan 10 15:42 libvppinfra_22.10.0-33~g612d3915c_amd64.deb
--rw-r--r-- 1 root root   144338 Jan 10 15:42 libvppinfra-dev_22.10.0-33~g612d3915c_amd64.deb
--rw-r--r-- 1 root root    26466 Jan 10 15:42 python3-vpp-api_22.10.0-33~g612d3915c_amd64.deb
--rw-r--r-- 1 root root  5575178 Jan 10 15:42 vpp_22.10.0-33~g612d3915c_amd64.deb
--rw-r--r-- 1 root root 82597716 Jan 10 15:43 vpp-dbg_22.10.0-33~g612d3915c_amd64.deb
--rw-r--r-- 1 root root  1294912 Jan 10 15:43 vpp-dev_22.10.0-33~g612d3915c_amd64.deb
--rw-r--r-- 1 root root  4736308 Jan 10 15:42 vpp-plugin-core_22.10.0-33~g612d3915c_amd64.deb
--rw-r--r-- 1 root root   363586 Jan 10 15:42 vpp-plugin-devtools_22.10.0-33~g612d3915c_amd64.deb
--rw-r--r-- 1 root root  4461496 Jan 10 15:42 vpp-plugin-dpdk_22.10.0-33~g612d3915c_amd64.deb
+-rw-r--r-- 1 root root    240460 Mar  1 13:21 libvppinfra_22.10.0-33~g3ff675ed2-dirty_amd64.deb
+-rw-r--r-- 1 root root    144422 Mar  1 13:21 libvppinfra-dev_22.10.0-33~g3ff675ed2-dirty_amd64.deb
+-rw-r--r-- 1 root root     26432 Mar  1 13:21 python3-vpp-api_22.10.0-33~g3ff675ed2-dirty_amd64.deb
+-rw-r--r-- 1 root root   5726692 Mar  1 13:21 vpp_22.10.0-33~g3ff675ed2-dirty_amd64.deb
+-rw-r--r-- 1 root root 127439896 Mar  1 13:21 vpp-dbg_22.10.0-33~g3ff675ed2-dirty_amd64.deb
+-rw-r--r-- 1 root root   1292882 Mar  1 13:21 vpp-dev_22.10.0-33~g3ff675ed2-dirty_amd64.deb
+-rw-r--r-- 1 root root   5092268 Mar  1 13:21 vpp-plugin-core_22.10.0-33~g3ff675ed2-dirty_amd64.deb
+-rw-r--r-- 1 root root    366340 Mar  1 13:21 vpp-plugin-devtools_22.10.0-33~g3ff675ed2-dirty_amd64.deb
+-rw-r--r-- 1 root root   4545978 Mar  1 13:21 vpp-plugin-dpdk_22.10.0-33~g3ff675ed2-dirty_amd64.deb
 ```
 
 <a id="build_vpp_debug"></a>
@@ -207,8 +221,8 @@ Then build binary packages as follows.
 # make package
 ...
 # ls -l *.deb
--rw-r--r-- 1 root root 2888002 Jan 11 17:04 upf-plugin_1.13.0_amd64.deb
--rw-r--r-- 1 root root   38740 Jan 11 17:04 upf-plugin-dev_1.13.0_amd64.deb
+-rw-r--r-- 1 root root 2882952 Mar  1 13:25 upf-plugin_1.13.0_amd64.deb
+-rw-r--r-- 1 root root   38748 Mar  1 13:25 upf-plugin-dev_1.13.0_amd64.deb
 ```
 
 <a id="install_upg_vpp_pkg"></a>
@@ -495,40 +509,40 @@ First, create group `vpp` if it doesn't exist.
 Then run UPG-VPP.
 ```
 # /usr/bin/vpp -c /root/upg-vpp/startup.conf
-vat-plug/load      [error ]: vat_plugin_register: vrrp plugin not loaded...
 vat-plug/load      [error ]: vat_plugin_register: dhcp plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: flowprobe plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: acl plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: nsim plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: rdma plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: oddbuf plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: avf plugin not loaded...
 vat-plug/load      [error ]: vat_plugin_register: lacp plugin not loaded...
-vat-plug/load      [error ]: pot_vat_plugin_register: pot plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: tracedump plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: lldp plugin not loaded...
 vat-plug/load      [error ]: vat_plugin_register: builtinurl plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: mdata plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: lb plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register_gpe: lisp_gpe plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: vmxnet3 plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: nsh plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: tls_openssl plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: geneve plugin not loaded...
 vat-plug/load      [error ]: vat_plugin_register: memif plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: lb plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: tls_openssl plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: mdata plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: oddbuf plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: nsh plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: vrrp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: ikev2 plugin not loaded...
 vat-plug/load      [error ]: vat_plugin_register: af_xdp plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: arping plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: rdma plugin not loaded...
 vat-plug/load      [error ]: vat_plugin_register: l2tp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: avf plugin not loaded...
+vat-plug/load      [error ]: pot_vat_plugin_register: pot plugin not loaded...
 vat-plug/load      [error ]: vat_plugin_register: mactime plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: cdp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register_gpe: lisp_gpe plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: stn plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: geneve plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: lldp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: arping plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: acl plugin not loaded...
 vat-plug/load      [error ]: vat_plugin_register: ct6 plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: pppoe plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: flowprobe plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: nsim plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: vmxnet3 plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: cdp plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: gtpu plugin not loaded...
 vat-plug/load      [error ]: vat_plugin_register: http_static plugin not loaded...
 vat-plug/load      [error ]: vat_plugin_register: adl plugin not loaded...
 vat-plug/load      [error ]: vat_plugin_register: dns plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: gtpu plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: ikev2 plugin not loaded...
-vat-plug/load      [error ]: vat_plugin_register: stn plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: pppoe plugin not loaded...
+vat-plug/load      [error ]: vat_plugin_register: tracedump plugin not loaded...
     _______    _        _   _____  ___ 
  __/ __/ _ \  (_)__    | | / / _ \/ _ \
  _/ _// // / / / _ \   | |/ / ___/ ___/
@@ -543,7 +557,7 @@ vpp# show plugins
 
      Plugin                                   Version                          Description
   1. upf_plugin.so                            v1.13.0                          User Plane Gateway
-  2. dpdk_plugin.so                           22.10.0-33~g612d3915c            Data Plane Development Kit (DPDK)
+  2. dpdk_plugin.so                           22.10.0-33~g3ff675ed2-dirty      Data Plane Development Kit (DPDK)
 vpp# 
 ```
 To check the log, run the following command. If necessary, change the log level in `startup.conf`.
@@ -585,26 +599,26 @@ There is no change.
 # systemctl restart vpp
 # systemctl status vpp
 â vpp.service - vector packet processing engine
-     Loaded: loaded (/lib/systemd/system/vpp.service; disabled; vendor preset: enabled)
-     Active: active (running) since Sun 2026-01-11 17:16:52 JST; 2s ago
-    Process: 1353 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
-   Main PID: 1354 (vpp_main)
-      Tasks: 3 (limit: 9387)
-     Memory: 1.3G
-        CPU: 2.519s
+     Loaded: loaded (/usr/lib/systemd/system/vpp.service; disabled; preset: enabled)
+     Active: active (running) since Sun 2026-03-01 14:36:20 JST; 5s ago
+    Process: 2471 ExecStartPre=/sbin/modprobe uio_pci_generic (code=exited, status=0/SUCCESS)
+   Main PID: 2473 (vpp_main)
+      Tasks: 3 (limit: 9434)
+     Memory: 1.3G (peak: 1.3G)
+        CPU: 6.109s
      CGroup: /system.slice/vpp.service
-             ââ1354 /usr/bin/vpp -c /etc/vpp/startup.conf
+             ââ2473 /usr/bin/vpp -c /etc/vpp/startup.conf
 
-Jan 11 17:16:53 upg-vpp11 vpp[1354]: vat-plug/load      [error ]: vat_plugin_register: mactime plugin not loaded...
-Jan 11 17:16:53 upg-vpp11 vpp[1354]: vat-plug/load      [error ]: vat_plugin_register: cdp plugin not loaded...
-Jan 11 17:16:53 upg-vpp11 vpp[1354]: vat-plug/load      [error ]: vat_plugin_register: ct6 plugin not loaded...
-Jan 11 17:16:53 upg-vpp11 vpp[1354]: vat-plug/load      [error ]: vat_plugin_register: pppoe plugin not loaded...
-Jan 11 17:16:53 upg-vpp11 vpp[1354]: vat-plug/load      [error ]: vat_plugin_register: http_static plugin not loaded...
-Jan 11 17:16:53 upg-vpp11 vpp[1354]: vat-plug/load      [error ]: vat_plugin_register: adl plugin not loaded...
-Jan 11 17:16:53 upg-vpp11 vpp[1354]: vat-plug/load      [error ]: vat_plugin_register: dns plugin not loaded...
-Jan 11 17:16:53 upg-vpp11 vpp[1354]: vat-plug/load      [error ]: vat_plugin_register: gtpu plugin not loaded...
-Jan 11 17:16:53 upg-vpp11 vpp[1354]: vat-plug/load      [error ]: vat_plugin_register: ikev2 plugin not loaded...
-Jan 11 17:16:53 upg-vpp11 vpp[1354]: vat-plug/load      [error ]: vat_plugin_register: stn plugin not loaded...
+Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_register: flowprobe plugin not loaded...
+Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_register: nsim plugin not loaded...
+Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_register: vmxnet3 plugin not loaded...
+Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_register: cdp plugin not loaded...
+Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_register: gtpu plugin not loaded...
+Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_register: http_static plugin not loaded...
+Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_register: adl plugin not loaded...
+Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_register: dns plugin not loaded...
+Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_register: pppoe plugin not loaded...
+Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_register: tracedump plugin not loaded...
 ```
 
 <a id="verify"></a>
@@ -627,10 +641,10 @@ n3                                 1     up   n3
     TX Hash: [name: hash-eth-l34 priority: 50 description: Hash ethernet L34 headers]
     queue shared thread(s)      
     0     yes    0-1
-  Ethernet address bc:24:11:38:ef:15
+  Ethernet address bc:24:11:bd:8f:f3
   Red Hat Virtio
     carrier up full duplex max-frame-size 9022 
-    flags: admin-up maybe-multiseg tx-offload int-supported
+    flags: admin-up maybe-multiseg tx-offload
     Devargs: 
     rx: queues 1 (max 1), desc 256 (min 32 max 32768 align 1)
     tx: queues 1 (max 1), desc 256 (min 32 max 32768 align 1)
@@ -658,17 +672,16 @@ n4                                 2     up   n4
     TX Hash: [name: hash-eth-l34 priority: 50 description: Hash ethernet L34 headers]
     queue shared thread(s)      
     0     yes    0-1
-  Ethernet address bc:24:11:4a:80:b2
+  Ethernet address bc:24:11:1b:80:61
   Red Hat Virtio
     carrier up full duplex max-frame-size 9022 
-    flags: admin-up maybe-multiseg tx-offload int-supported
+    flags: admin-up maybe-multiseg tx-offload
     Devargs: 
     rx: queues 1 (max 1), desc 256 (min 32 max 32768 align 1)
     tx: queues 1 (max 1), desc 256 (min 32 max 32768 align 1)
     pci: device 1af4:1000 subsystem 1af4:0001 address 0000:00:15.00 numa 0
     max rx packet len: 9728
     promiscuous: unicast off all-multicast on
-0: format_dpdk_device:444: rte_eth_dev_rss_hash_conf_get returned -95
     vlan offload: strip off filter off qinq off
     rx offload avail:  vlan-strip udp-cksum tcp-cksum tcp-lro vlan-filter 
                        scatter 
@@ -680,6 +693,7 @@ n4                                 2     up   n4
     tx burst function: (not available)
     rx burst function: (not available)
 
+0: format_dpdk_device:444: rte_eth_dev_rss_hash_conf_get returned -95
 n6                                 3     up   n6
   Link speed: unknown
   RX Queues:
@@ -689,10 +703,10 @@ n6                                 3     up   n6
     TX Hash: [name: hash-eth-l34 priority: 50 description: Hash ethernet L34 headers]
     queue shared thread(s)      
     0     yes    0-1
-  Ethernet address bc:24:11:a5:48:75
+  Ethernet address bc:24:11:a4:08:34
   Red Hat Virtio
     carrier up full duplex max-frame-size 9022 
-    flags: admin-up maybe-multiseg tx-offload int-supported
+    flags: admin-up maybe-multiseg tx-offload
     Devargs: 
     rx: queues 1 (max 1), desc 256 (min 32 max 32768 align 1)
     tx: queues 1 (max 1), desc 256 (min 32 max 32768 align 1)
@@ -712,11 +726,20 @@ n6                                 3     up   n6
 
     tx frames ok                                           1
     tx bytes ok                                           42
+    rx frames ok                                           1
+    rx bytes ok                                           42
     extended stats:
+      rx_good_packets                                      1
       tx_good_packets                                      1
+      rx_good_bytes                                       42
       tx_good_bytes                                       42
+      rx_q0_packets                                        1
+      rx_q0_bytes                                         42
       tx_q0_packets                                        1
       tx_q0_bytes                                         42
+      rx_q0_good_packets                                   1
+      rx_q0_good_bytes                                    42
+      rx_q0_undersize_packets                              1
       tx_q0_good_packets                                   1
       tx_q0_good_bytes                                    42
       tx_q0_broadcast_packets                              1
@@ -799,6 +822,7 @@ I would like to thank the excellent developers and all the contributors of UPG-V
 
 ## Changelog (summary)
 
+- [2026.03.01] Changed the UPG-VPP OS from Ubuntu 22.04 to 24.04.
 - [2025.12.20] Added a note about the QFI patch by @mitmitmitm.
 - [2025.05.25] Deleted the description of the build procedure for [oai-cn5g-upf-vpp](https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-upf-vpp), and changed to UPG-VPP only.
 - [2024.10.14] Changed the VM environment from Virtualbox to Proxmox VE.
