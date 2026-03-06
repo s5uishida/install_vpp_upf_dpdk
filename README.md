@@ -560,6 +560,14 @@ vpp# show plugins
   2. dpdk_plugin.so                           22.10.0-33~g3ff675ed2-dirty      Data Plane Development Kit (DPDK)
 vpp# 
 ```
+The status of each thread running by VPP is as follows.
+```
+vpp# show threads 
+ID     Name                Type        LWP     Sched Policy (Priority)  lcore  Core   Socket State     
+0      vpp_main                        1145    other (0)                0      0      0      
+1      vpp_wk_0            workers     1153    other (0)                1      1      0      
+vpp# 
+```
 To check the log, run the following command. If necessary, change the log level in `startup.conf`.
 ```
 vpp# show logging
@@ -625,13 +633,6 @@ Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_reg
 
 ### Verify interfaces at VPP
 
-```
-vpp# show threads 
-ID     Name                Type        LWP     Sched Policy (Priority)  lcore  Core   Socket State     
-0      vpp_main                        1145    other (0)                0      0      0      
-1      vpp_wk_0            workers     1153    other (0)                1      1      0      
-vpp# 
-```
 ```
 vpp# show hardware-interfaces 
               Name                Idx   Link  Hardware
