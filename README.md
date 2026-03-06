@@ -770,6 +770,15 @@ upf-nwi-internet (up):
 vpp# 
 ```
 ```
+vpp# show interface rx-placement 
+Thread 1 (vpp_wk_0):
+ node dpdk-input:
+    n3 queue 0 (polling)
+    n4 queue 0 (polling)
+    n6 queue 0 (polling)
+vpp# 
+```
+```
 vpp# show udp punt
 IPV4 UDP ports punt : 2152, 8805
 IPV6 UDP ports punt : 2152
