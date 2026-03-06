@@ -626,6 +626,13 @@ Mar 01 14:36:21 upg-vpp21 vpp[2473]: vat-plug/load      [error ]: vat_plugin_reg
 ### Verify interfaces at VPP
 
 ```
+vpp# show threads 
+ID     Name                Type        LWP     Sched Policy (Priority)  lcore  Core   Socket State     
+0      vpp_main                        1145    other (0)                0      0      0      
+1      vpp_wk_0            workers     1153    other (0)                1      1      0      
+vpp# 
+```
+```
 vpp# show hardware-interfaces 
               Name                Idx   Link  Hardware
 local0                             0    down  local0
