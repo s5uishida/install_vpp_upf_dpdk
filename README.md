@@ -33,13 +33,13 @@ This briefly describes the steps and configuration to build and install [travelp
   - [Case of using kernel module **vfio-pci**](#vfio_pci)
   - [Network settings](#network_settings)
   - [Create configuration files](#conf)
-- [Notes](#notes)
-  - [Change configuration of smf.yaml in Open5GS](#open5gs)
-  - [Change configuration of smfcfg.yaml in free5GC](#free5gc)
 - [Run UPG-VPP on VM-UP](#run)
   - [Run UPG-VPP when installing the built packages](#run_pkg)
   - [Verify interfaces at VPP](#verify)
 - [Setup Data Network Gateway on VM-DN](#setup_dn)
+- [Notes](#notes)
+  - [Change configuration of smf.yaml in Open5GS](#open5gs)
+  - [Change configuration of smfcfg.yaml in free5GC](#free5gc)
 - [How to capture packets on DPDK ports](#pcap)
 - [Sample Configurations](#sample_conf)
   - [For 5G](#5g_conf)
@@ -501,35 +501,6 @@ upf specification release 16
 ```
 `FTUP: Supported` is set in `UP Function Features` of `PFCP Association Setup Response` from UPG-VPP.
 
-<a id="notes"></a>
-
-## Notes
-
-<a id="open5gs"></a>
-
-### Change configuration of smf.yaml in Open5GS
-
-To connect Open5GS SMF to UPG-VPP, add the following parameter `use_upg_vpp: true` in `smf.yaml`. See [here](https://github.com/open5gs/open5gs/discussions/3591#discussioncomment-11369302) for the reason.
-
-`smf.yaml`
-```yaml
-global:
-  parameter:
-    use_upg_vpp: true
-```
-
-<a id="free5gc"></a>
-
-### Change configuration of smfcfg.yaml in free5GC
-
-To connect free5GC SMF to UPG-VPP, add the following parameter `nwInstFqdnEncoding: true` in `smfcfg.yaml`. See [here](https://github.com/s5uishida/enable_network_instance_encoding_free5gc_v3_3_0) for the reason.
-
-`smfcfg.yaml`
-```yaml
-configuration:
-  nwInstFqdnEncoding: true
-```
-
 <a id="run"></a>
 
 ## Run UPG-VPP on VM-UP
@@ -835,6 +806,35 @@ Next, configure NAPT and routing to N6 IP address of UPG-VPP.
 ```
 **Note. Set `<DN>` according to the core network.  
 ex) `10.45.0.0/16`**
+
+<a id="notes"></a>
+
+## Notes
+
+<a id="open5gs"></a>
+
+### Change configuration of smf.yaml in Open5GS
+
+To connect Open5GS SMF to UPG-VPP, add the following parameter `use_upg_vpp: true` in `smf.yaml`. See [here](https://github.com/open5gs/open5gs/discussions/3591#discussioncomment-11369302) for the reason.
+
+`smf.yaml`
+```yaml
+global:
+  parameter:
+    use_upg_vpp: true
+```
+
+<a id="free5gc"></a>
+
+### Change configuration of smfcfg.yaml in free5GC
+
+To connect free5GC SMF to UPG-VPP, add the following parameter `nwInstFqdnEncoding: true` in `smfcfg.yaml`. See [here](https://github.com/s5uishida/enable_network_instance_encoding_free5gc_v3_3_0) for the reason.
+
+`smfcfg.yaml`
+```yaml
+configuration:
+  nwInstFqdnEncoding: true
+```
 
 <a id="pcap"></a>
 
